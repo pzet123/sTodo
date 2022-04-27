@@ -20,11 +20,19 @@ class _QuestDetailsState extends State<QuestDetails> {
   List<Widget> getQuestTaskTiles() {
     List<Widget> questTaskTiles = [];
     for(QuestTask task in quest.getTasks()){
-      questTaskTiles.add(Row(
-        children: [
-          Icon((task.isCompleted()) ? Icons.diamond : Icons.diamond_outlined),
-          Text(task.getTaskDescription())
-        ],
+      questTaskTiles.add(Container(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Icon((task.isCompleted()) ? Icons.brightness_1 : Icons.brightness_1_outlined, color: Theme.of(context).colorScheme.secondary,),
+            SizedBox(width: 10,),
+            Text(task.getTaskDescription(),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary
+            ),
+            )
+          ],
+        ),
       ));
     }
     return questTaskTiles;
@@ -33,27 +41,48 @@ class _QuestDetailsState extends State<QuestDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(quest.getName(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "Balgruf",
-            fontSize: 24,
-            color: Theme.of(context).colorScheme.secondary
-          ),),
-        Text(quest.getDescription()),
-        Text("OBJECTIVES",
-          textAlign: TextAlign.center,
-          style: TextStyle(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(quest.getName(),
+        style: TextStyle(
+          fontFamily: "Balgruf",
+          fontSize: 24,
+          color: Theme.of(context).colorScheme.secondary
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: Colors.black,
+        padding: EdgeInsets.fromLTRB(20, 10, 15, 5),
+        child: Column(
+          children: [
+            Text(quest.getDescription(),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
               fontFamily: "Balgruf",
-              fontSize: 24,
-              color: Theme.of(context).colorScheme.secondary
-          ),),
-        ListView(
-          children: getQuestTaskTiles(),
-        )
-      ],
+              fontSize: 18
+              ),
+            ),
+            SizedBox(height: 12,),
+            Text("OBJECTIVES",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "Balgruf",
+                  fontSize: 24,
+                  color: Theme.of(context).colorScheme.secondary
+              ),),
+            Expanded(
+              child: Scrollbar(
+                isAlwaysShown: true,
+                child: ListView(
+                  children: getQuestTaskTiles(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

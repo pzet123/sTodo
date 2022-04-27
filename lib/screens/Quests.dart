@@ -1,6 +1,7 @@
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/models/Quest.dart';
+import 'package:stodo/screens/QuestDetails.dart';
 
 
 class QuestsScreen extends StatefulWidget {
@@ -44,32 +45,43 @@ class _QuestsScreenState extends State<QuestsScreen> {
     return questTiles;
   }
 
-  final double questListTileHeight = 60;
+  final double questListTileHeight = 70;
   final FixedExtentScrollController questListController = FixedExtentScrollController();
 
   @override
   Widget build(BuildContext context) {
+    questTileList = getActiveQuests() + getCompletedQuests();
     return Container(
       color: Colors.black,
       child: ClickableListWheelScrollView(
         scrollController: questListController,
         itemCount: questTileList.length,
         itemHeight: questListTileHeight,
-        onItemTapCallback: (index) => print("Item tapped"),
-        child: ListWheelScrollView(
+        scrollOnTap: false,
+        onItemTapCallback: (index) {
+          if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => QuestDetails(quest: questTileList[questListController.selectedItem].quest)));
+          } else {
+            questListController.animateToItem(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+          }
+          print(questListController.selectedItem);
+          print(index);
+
+        },
+        child: ListWheelScrollView.useDelegate(
           controller: questListController,
           itemExtent: questListTileHeight,
-          squeeze: 1.2,
           perspective: 0.00001,
           useMagnifier: true,
           magnification: 1.5,
           physics: FixedExtentScrollPhysics(),
           onSelectedItemChanged: (index) {
-
+            print(questListController.selectedItem);
           },
-          children:
-           (questTileList = getActiveQuests() +
-            getCompletedQuests()),
+          childDelegate: ListWheelChildBuilderDelegate(
+            builder: (context, index) => questTileList[index],
+            childCount: questTileList.length,
+          ),
         ),
       )
     );
@@ -88,20 +100,16 @@ class QuestTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => print("Opening quest"),
-      child: Center(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          child: Text(quest.getName(),
-            textAlign: TextAlign.end,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontFamily: "Balgruf",
-              fontSize: 22
-              ),
+    return Center(
+      child: Container(
+        child: Text(quest.getName(),
+          textAlign: TextAlign.end,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontFamily: "Balgruf",
+            fontSize: 22
             ),
-        ),
+          ),
       ),
     );
   }
