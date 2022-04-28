@@ -19,7 +19,29 @@ void main(){
       colorScheme: ColorScheme.fromSwatch().copyWith(
         primary: Colors.black87,
         secondary: Color.fromARGB(255, 240, 240, 240),
-        tertiary: Color.fromARGB(255, 174, 174, 174)
+        tertiary: Color.fromARGB(255, 140, 140, 140)
+      ),
+      textTheme: TextTheme(
+        headline1: TextStyle(
+          fontFamily: "Futura",
+          fontSize: 38,
+          color: Color.fromARGB(255, 240, 240, 240)
+        ),
+        headline2: TextStyle(
+            fontFamily: "Futura",
+            fontSize: 38,
+            color: Color.fromARGB(255, 140, 140, 140)
+        ),
+        headline3: TextStyle(
+            fontFamily: "Futura",
+            fontSize: 24,
+            color: Color.fromARGB(255, 240, 240, 240)
+        ),
+        headline4: TextStyle(
+            fontFamily: "Futura",
+            fontSize: 24,
+            color: Color.fromARGB(255, 174, 174, 174)
+        ),
       )
     ),
   ));
@@ -95,16 +117,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  AppBar createAppBar(String text, int pageIndex){
+  AppBar createAppBar(String text){
 
     List<String> appBarText = ["Quests", "General Stats", "Settings"];
 
     return AppBar(
       title: Text(appBarText[pageIndex],
-        style: TextStyle(
-            fontFamily: "Balgruf",
-            color: Theme.of(context).colorScheme.secondary
-        ),
+        style: Theme.of(context).textTheme.headline1
       ),
       centerTitle: true,
       leading: IconButton(
@@ -124,7 +143,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar("App bar", this.pageIndex),
+      appBar: createAppBar("App bar"),
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged,
@@ -137,7 +156,7 @@ class _MyAppState extends State<MyApp> {
       ),
       floatingActionButton: pageIndex == 0 ? FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddQuestScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddQuestScreen(questList))).then((_) => setState(() {}));
         },
         child: Icon(Icons.add, color: Colors.black87,)
       ) : null,

@@ -16,6 +16,8 @@ class QuestsScreen extends StatefulWidget {
 class _QuestsScreenState extends State<QuestsScreen> {
   List<Quest> questList;
   late List<QuestTile> questTileList;
+  late List<QuestTile> completedQuests;
+  late List<QuestTile> uncompletedQuests;
 
   @override
   _QuestsScreenState({required this.questList});
@@ -27,11 +29,16 @@ class _QuestsScreenState extends State<QuestsScreen> {
 
   List<QuestTile> getActiveQuests(){
     List<QuestTile> questTiles = [];
+    late Quest lastQuest;
     questList.forEach((quest) {
       if(!quest.isComplete()){
+        lastQuest = quest;
         questTiles.add(QuestTile(quest: quest,));
       }
     });
+    if(lastQuest != null){
+      questTiles.last = QuestTile(quest: lastQuest, lastActive: true);
+    }
     return questTiles;
   }
 
@@ -39,6 +46,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
     List<QuestTile> questTiles = [];
     questList.forEach((quest) {
       if(quest.isComplete()){
+
         questTiles.add(QuestTile(quest: quest,));
       }
     });
@@ -50,6 +58,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("QUEST LIST BUILD CALLED");
     questTileList = getActiveQuests() + getCompletedQuests();
     return Container(
       color: Colors.black,
@@ -60,7 +69,9 @@ class _QuestsScreenState extends State<QuestsScreen> {
         scrollOnTap: false,
         onItemTapCallback: (index) {
           if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => QuestDetails(quest: questTileList[questListController.selectedItem].quest)));
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)
+              => QuestDetails(quest: questTileList[questListController.selectedItem].quest))
+            ).then((_) => setState(() {}));
           } else {
             questListController.animateToItem(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
           }
@@ -71,13 +82,11 @@ class _QuestsScreenState extends State<QuestsScreen> {
         child: ListWheelScrollView.useDelegate(
           controller: questListController,
           itemExtent: questListTileHeight,
+          overAndUnderCenterOpacity: 0.7,
           perspective: 0.00001,
           useMagnifier: true,
           magnification: 1.5,
           physics: FixedExtentScrollPhysics(),
-          onSelectedItemChanged: (index) {
-            print(questListController.selectedItem);
-          },
           childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, index) => questTileList[index],
             childCount: questTileList.length,
@@ -93,23 +102,26 @@ class _QuestsScreenState extends State<QuestsScreen> {
 
 class QuestTile extends StatelessWidget {
   final Quest quest;
+  bool lastActive;
 
-  QuestTile({required this.quest});
+  QuestTile({required this.quest, this.lastActive = false});
 
 
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        child: Text(quest.getName(),
-          textAlign: TextAlign.end,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
-            fontFamily: "Balgruf",
-            fontSize: 22
+      child: Stack(
+        children: [Center(
+          child: Text(quest.getName(),
+            style: !quest.isComplete() ? Theme.of(context).textTheme.headline1 : Theme.of(context).textTheme.headline2
             ),
-          ),
+        ),
+          lastActive ? Transform.translate(
+          offset: Offset(0, 62),
+            child: Divider(thickness: 4, color: Theme.of(context).colorScheme.tertiary, indent: 30, endIndent: 30,),
+        ) : Text("")
+        ]
       ),
     );
   }

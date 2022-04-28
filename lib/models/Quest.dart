@@ -13,6 +13,25 @@ class Quest{
     return _isComplete;
   }
 
+  void setComplete(bool isComplete){
+    _isComplete = isComplete;
+  }
+
+  void setName(String name){
+    _name = name;
+  }
+
+  void update(){
+    bool questCompleted = true;
+    for(QuestTask task in _tasks){
+      if(!task.isCompleted()){
+        questCompleted = false;
+        break;
+      }
+    }
+    _isComplete = questCompleted;
+  }
+
   String getName(){
     return this._name;
   }

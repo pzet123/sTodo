@@ -80,6 +80,10 @@ flutter:
      fonts:
        - asset: assets/fonts/Balgruf-JRye7.ttf
        - asset: assets/fonts/BalgrufItalic-GOyem.ttf
+   - family: Futura
+     fonts:
+       - asset: assets/fonts/futura-condensed.otf
+       - asset: assets/fonts/futura-condensed-italic.otf
          style: italic
   #   - family: Trajan Pro
   #     fonts:
