@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/models/QuestTask.dart';
 
@@ -16,6 +19,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   TextEditingController questTitleController = TextEditingController();
   TextEditingController questDescriptionController = TextEditingController();
   TextEditingController newTaskController = TextEditingController();
+  double questAddedTextOpacity = 0.0;
+  bool hideWidget = true;
 
   List<QuestTask> newTasks = [];
 
@@ -30,10 +35,32 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     return newTaskWidgets;
   }
 
-  void addQuest(){
-    Quest newQuest = Quest(questTitleController.text, questDescriptionController.text, newTasks, false);
-    widget.questList.add(newQuest);
-    Navigator.pop(context);
+  playNewQuestSound() async{
+    AudioCache player = AudioCache();
+    const String newQuestSoundPath = "newQuest.mp3";
+    player.play(newQuestSoundPath);
+  }
+
+
+  void addQuest() async{
+    playNewQuestSound();
+    setState(() {
+      questAddedTextOpacity = 1.0;
+      hideWidget = false;
+    });
+    Timer(Duration(seconds: 1), () {
+      Quest newQuest = Quest(questTitleController.text, questDescriptionController.text, newTasks, false);
+      widget.questList.add(newQuest);
+      questTitleController.clear();
+      questDescriptionController.clear();
+      newTaskController.clear();
+      newTasks = [];
+    });
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        questAddedTextOpacity = 0.0;
+      });
+    });
   }
 
   void addTask(){
@@ -59,48 +86,74 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Start a New Quest"),
+        title: Text("Start a New Quest", style: Theme.of(context).textTheme.headline3,),
         centerTitle: true,
       ),
       body: Container(
         color: Colors.black,
-        child: Column(
-          children: [
-            TextField(
-              controller: questTitleController,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontFamily: "Futura",
-                fontSize: 18
+        child: Stack(
+          children: [Column(
+            children: [
+              TextField(
+                cursorColor: Colors.white,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  hintText: "Enter Quest Name",
+                  hintStyle: Theme.of(context).textTheme.subtitle1,
+                  labelText: "Quest Name",
+                  labelStyle: Theme.of(context).textTheme.subtitle1
+                ),
+                controller: questTitleController,
+                style: Theme.of(context).textTheme.subtitle1
+              ),
+              TextField(
+                cursorColor: Colors.white,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  hintText: "Enter Quest Description",
+                  hintStyle: Theme.of(context).textTheme.subtitle1,
+                  labelText: "Quest Description",
+                  labelStyle: Theme.of(context).textTheme.subtitle1
+                ),
+                controller: questDescriptionController,
+                style: Theme.of(context).textTheme.subtitle1
+              ),
+              Text("Tasks",
+                style: Theme.of(context).textTheme.headline1
+              ),
+              ElevatedButton(
+                  onPressed: addTask,
+                  child: Text("Add a new task", style: Theme.of(context).textTheme.headline3,)),
+              Expanded(
+                child: ListView(
+                  children: getNewTasks(),
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: addQuest,
+                  child: Icon(Icons.add, color: Colors.white,))
+            ],
+          ),
+            AnimatedOpacity(
+            curve: Curves.decelerate,
+            opacity: questAddedTextOpacity,
+            duration: Duration(seconds: 1),
+            onEnd: () => setState(() {
+              if(questAddedTextOpacity == 0.0) {
+                hideWidget = true;
+              }
+            }),
+            child: Transform.translate(
+              offset: hideWidget ? Offset(-5000, -5000) : Offset(0, 0),
+              child: Container(
+                color: Colors.black,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Center(child: Text("Quest Added", style: Theme.of(context).textTheme.headlineLarge,)),
               ),
             ),
-            TextField(
-              controller: questDescriptionController,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontFamily: "Balgruf",
-                  fontSize: 18
-              ),
-            ),
-            Text("Tasks",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontFamily: "Balgruf",
-                fontSize: 26
-              ),
-            ),
-            ElevatedButton(
-                onPressed: addTask,
-                child: Text("Add a new task", style: Theme.of(context).textTheme.headline3,)),
-            Expanded(
-              child: ListView(
-                children: getNewTasks(),
-              ),
-            ),
-            ElevatedButton(
-                onPressed: addQuest,
-                child: Icon(Icons.add, color: Colors.white,))
-          ],
+          )
+        ]
         ),
       ),
     );

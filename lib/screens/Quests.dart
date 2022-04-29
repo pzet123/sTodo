@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/models/Quest.dart';
 import 'package:stodo/screens/QuestDetails.dart';
@@ -53,6 +56,12 @@ class _QuestsScreenState extends State<QuestsScreen> {
     return questTiles;
   }
 
+  void playMenuSound() async{
+    AudioCache player = AudioCache();
+    const String menuScrollSoundPath = "menuScroll.mp3";
+    player.play(menuScrollSoundPath);
+  }
+
   final double questListTileHeight = 70;
   final FixedExtentScrollController questListController = FixedExtentScrollController();
 
@@ -87,6 +96,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
           useMagnifier: true,
           magnification: 1.5,
           physics: FixedExtentScrollPhysics(),
+          onSelectedItemChanged: (index) => playMenuSound(),
           childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, index) => questTileList[index],
             childCount: questTileList.length,

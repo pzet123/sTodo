@@ -34,14 +34,24 @@ void main(){
         ),
         headline3: TextStyle(
             fontFamily: "Futura",
-            fontSize: 24,
+            fontSize: 30,
             color: Color.fromARGB(255, 240, 240, 240)
         ),
         headline4: TextStyle(
             fontFamily: "Futura",
-            fontSize: 24,
+            fontSize: 30,
             color: Color.fromARGB(255, 174, 174, 174)
         ),
+        headlineLarge: TextStyle(
+          fontFamily: "Balgruf",
+          fontSize: 40,
+          color: Color.fromARGB(255, 240, 240, 240),
+        ),
+        subtitle1: TextStyle(
+          fontFamily: "Futura",
+          fontSize: 26,
+          color: Color.fromARGB(255, 240, 240, 240),
+        )
       )
     ),
   ));

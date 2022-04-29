@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/models/QuestTask.dart';
 
@@ -18,10 +19,20 @@ class _QuestDetailsState extends State<QuestDetails> {
 
   _QuestDetailsState({required this.quest});
 
+  void playQuestUpdatedSound() async{
+    AudioCache player = AudioCache();
+    const String questUpdatedSoundPath = "questUpdate.mp3";
+    player.play(questUpdatedSoundPath);
+  }
+
+
   Widget getTaskTile(QuestTask task){
     return GestureDetector(
       onTap: () => setState(() {
         task.toggleCompleted();
+        if(task.isCompleted()){
+          playQuestUpdatedSound();
+        }
         quest.update();
       }),
       child: Container(
