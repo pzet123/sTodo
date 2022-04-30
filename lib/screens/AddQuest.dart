@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/models/QuestTask.dart';
 
+import '../main.dart';
 import '../models/Quest.dart';
 
 class AddQuestScreen extends StatefulWidget {
@@ -29,7 +30,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     newTasks.forEach((task){
       newTaskWidgets.add(Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-        child: Text(task.getTaskDescription(), style: Theme.of(context).textTheme.headline3,),
+        child: Text(task.getTaskDescription(), style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center,),
       ));
     });
     return newTaskWidgets;
@@ -55,6 +56,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
       questDescriptionController.clear();
       newTaskController.clear();
       newTasks = [];
+      saveQuestList();
     });
     Timer(Duration(seconds: 3), () {
       setState(() {
@@ -67,7 +69,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Add a Task"),
-        content: TextField(controller: newTaskController),
+        content: TextField(controller: newTaskController,
+        style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black),),
         actions: [
           ElevatedButton(
               onPressed: () => setState(() {
@@ -75,7 +78,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                 newTaskController.clear();
                 Navigator.pop(context);
               }),
-              child: Icon(Icons.add_circle_outline_rounded, color: Theme.of(context).colorScheme.secondary,))
+              child: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary,))
         ],
       );
     });
@@ -94,36 +97,57 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
         child: Stack(
           children: [Column(
             children: [
-              TextField(
-                cursorColor: Colors.white,
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  hintText: "Enter Quest Name",
-                  hintStyle: Theme.of(context).textTheme.subtitle1,
-                  labelText: "Quest Name",
-                  labelStyle: Theme.of(context).textTheme.subtitle1
+              Container(
+                margin: EdgeInsets.all(10),
+                child: TextField(
+                  cursorColor: Colors.white,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    hintText: "Enter Quest Name",
+                    hintStyle: Theme.of(context).textTheme.subtitle1,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                    ),
+                    labelText: "Quest Name",
+                    labelStyle: Theme.of(context).textTheme.subtitle1
+                  ),
+                  controller: questTitleController,
+                  style: Theme.of(context).textTheme.subtitle1
                 ),
-                controller: questTitleController,
-                style: Theme.of(context).textTheme.subtitle1
               ),
-              TextField(
-                cursorColor: Colors.white,
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  hintText: "Enter Quest Description",
-                  hintStyle: Theme.of(context).textTheme.subtitle1,
-                  labelText: "Quest Description",
-                  labelStyle: Theme.of(context).textTheme.subtitle1
+              Container(
+                margin: EdgeInsets.all(10),
+                child: TextField(
+                  cursorColor: Colors.white,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    hintText: "Enter Quest Description",
+                    hintStyle: Theme.of(context).textTheme.subtitle1,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                      ),
+                    labelText: "Quest Description",
+                    labelStyle: Theme.of(context).textTheme.subtitle1
+                  ),
+                  controller: questDescriptionController,
+                  style: Theme.of(context).textTheme.subtitle1
                 ),
-                controller: questDescriptionController,
-                style: Theme.of(context).textTheme.subtitle1
               ),
               Text("Tasks",
                 style: Theme.of(context).textTheme.headline1
               ),
               ElevatedButton(
                   onPressed: addTask,
-                  child: Text("Add a new task", style: Theme.of(context).textTheme.headline3,)),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
+                  ),
+                  child: Text("Add a new task", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black),)),
               Expanded(
                 child: ListView(
                   children: getNewTasks(),

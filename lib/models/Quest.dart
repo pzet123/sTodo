@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:stodo/models/QuestTask.dart';
 
@@ -8,6 +9,20 @@ class Quest{
   String _description;
 
   Quest(this._name, this._description, this._tasks, this._isComplete);
+
+  Quest.fromJson(Map<String, dynamic> jsonMap) :
+      _name = jsonMap["name"],
+      _isComplete = jsonMap["isComplete"] == "true",
+      _tasks = (json.decode(jsonMap["tasks"]) as List<dynamic>).map((e) => QuestTask.fromJson(e)).toList(),
+      _description = jsonMap["description"];
+
+
+  Map<String, dynamic> toJson() => {
+    "name": _name,
+    "isComplete" : _isComplete.toString(),
+    "tasks" : json.encode(_tasks),
+    "description" : _description
+  };
 
   bool isComplete(){
     return _isComplete;
