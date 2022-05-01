@@ -169,7 +169,7 @@ class _QuestDetailsState extends State<QuestDetails> {
             children: [Column(
               children: [
                 Expanded(
-                  flex: orientation == Orientation.portrait ? 7 : 6,
+                  flex: quest.getDescription().isEmpty ? 0 : (orientation == Orientation.portrait ? 7 : 6),
                   child: Scrollbar(
                     child: SingleChildScrollView(
                       child: Padding(

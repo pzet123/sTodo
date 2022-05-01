@@ -74,14 +74,14 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
 
   void addQuest() async{
     if(questValid()){
+      Quest newQuest = Quest(questTitleController.text, questDescriptionController.text, newTasks, false);
+      widget.questList.add(newQuest);
       playNewQuestSound();
       setState(() {
         questAddedTextOpacity = 1.0;
         _hideWidget = false;
       });
       Timer(Duration(seconds: 1), () {
-        Quest newQuest = Quest(questTitleController.text, questDescriptionController.text, newTasks, false);
-        widget.questList.add(newQuest);
         questTitleController.clear();
         questDescriptionController.clear();
         newTaskController.clear();

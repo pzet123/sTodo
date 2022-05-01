@@ -67,38 +67,47 @@ class _QuestsScreenState extends State<QuestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double appBarHeight = Scaffold.of(context).appBarMaxHeight!;
+    print("Screen width: ${MediaQuery.of(context).size.width}");
+    print("Screen height: ${MediaQuery.of(context).size.height}");
+    bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     completedQuests = getCompletedQuests();
     questTileList = getActiveQuests() + completedQuests;
     return Container(
       color: Colors.black,
-      child: questTileList.isNotEmpty ? ClickableListWheelScrollView(
-        scrollController: questListController,
-        itemCount: questTileList.length,
-        itemHeight: questListTileHeight,
-        scrollOnTap: false,
-        onItemTapCallback: (index) {
-          if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)
-              => QuestDetails(quest: questTileList[questListController.selectedItem].quest))
-            ).then((_) => setState(() {}));
-          } else {
-            questListController.animateToItem(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
-          }
-        },
-        child: ListWheelScrollView.useDelegate(
-          controller: questListController,
-          itemExtent: questListTileHeight,
-          overAndUnderCenterOpacity: 0.7,
-          perspective: 0.00001,
-          useMagnifier: true,
-          magnification: 1.5,
-          physics: FixedExtentScrollPhysics(),
-          onSelectedItemChanged: (index) => playMenuSound(),
-          childDelegate: ListWheelChildBuilderDelegate(
-            builder: (context, index) => questTileList[index],
-            childCount: questTileList.length,
-          ),
-        ),
+      child: Stack(
+        fit: StackFit.expand,
+          children: [
+            Image(image: AssetImage(isPortrait ? "assets/images/background.png" : "assets/images/backgroundH.png"),
+            height: double.infinity, width: double.infinity, fit: BoxFit.fill,),
+            questTileList.isNotEmpty ? ClickableListWheelScrollView(
+              scrollController: questListController,
+              itemCount: questTileList.length,
+              itemHeight: questListTileHeight,
+              scrollOnTap: false,
+              onItemTapCallback: (index) {
+                if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)
+                    => QuestDetails(quest: questTileList[questListController.selectedItem].quest))
+                  ).then((_) => setState(() {}));
+                } else {
+                  questListController.animateToItem(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                }
+              },
+              child: ListWheelScrollView.useDelegate(
+                controller: questListController,
+                itemExtent: questListTileHeight,
+                overAndUnderCenterOpacity: 0.7,
+                perspective: 0.00001,
+                useMagnifier: true,
+                magnification: 1.3,
+                physics: FixedExtentScrollPhysics(),
+                onSelectedItemChanged: (index) => playMenuSound(),
+                childDelegate: ListWheelChildBuilderDelegate(
+                  builder: (context, index) => questTileList[index],
+                  childCount: questTileList.length,
+                ),
+              ),
       ) : Column(
         children: [
           Image.asset("assets/images/steelSword.png",
@@ -107,7 +116,8 @@ class _QuestsScreenState extends State<QuestsScreen> {
           ),
           Text("Add a Quest", style: Theme.of(context).textTheme.headlineLarge),
         ],
-      )
+      ),
+    ])
     );
   }
 
@@ -134,7 +144,7 @@ class QuestTile extends StatelessWidget {
         ),
           lastActive ? Transform.translate(
           offset: Offset(0, 62),
-            child: Divider(thickness: 4, color: Theme.of(context).colorScheme.tertiary, indent: 30, endIndent: 30,),
+            child: Divider(thickness: 4, color: Theme.of(context).colorScheme.tertiary, indent: 45, endIndent: 45,),
         ) : Text("")
         ]
       ),
