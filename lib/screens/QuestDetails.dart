@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:stodo/main.dart';
 import 'package:stodo/models/QuestTask.dart';
 
 import '../models/Quest.dart';
@@ -36,6 +37,19 @@ class _QuestDetailsState extends State<QuestDetails> {
     player.play(levelUpSoundPath);
   }
 
+  void playQuestDeletedSound() async{
+    AudioCache player = AudioCache();
+    const String levelUpSoundPath = "itemDestroy.mp3";
+    player.play(levelUpSoundPath);
+  }
+
+  void deleteQuest() async{
+    questList.remove(quest);
+    saveQuestList();
+    playQuestDeletedSound();
+    Navigator.pop(context);
+  }
+
   void finishQuest(){
     playQuestFinishedSound();
     setState(() {
@@ -60,7 +74,7 @@ class _QuestDetailsState extends State<QuestDetails> {
         questUpdatedOpacity = 1.0;
         hideWidget = false;
       });
-      Timer(Duration(seconds: 3), () {
+      Timer(Duration(milliseconds: 2500), () {
         setState(() {
           questUpdatedOpacity = 0.0;
         });
@@ -109,6 +123,23 @@ class _QuestDetailsState extends State<QuestDetails> {
     }
     return questTaskTiles;
   }
+
+  Widget getObjectivesText() {
+    return Stack(
+      children: [
+        Transform.translate(
+            offset: Offset(-83, 7),
+            child: Image.asset("assets/images/miscQuestBannerL.png", color: Colors.white, scale: 2.2,)
+        ),
+        Text("OBJECTIVES",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline5,),
+        Transform.translate(
+            offset: Offset(137, 7),
+            child: Image.asset("assets/images/miscQuestBannerR.png", color: Colors.white, scale: 2.2))
+    ]
+    );
+  }
   
 
   @override
@@ -125,6 +156,11 @@ class _QuestDetailsState extends State<QuestDetails> {
             ),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () => deleteQuest(),
+                icon: Icon(Icons.close_sharp, color: Theme.of(context).colorScheme.secondary,))
+          ],
         ),
         body: Container(
           color: Colors.black,
@@ -133,27 +169,23 @@ class _QuestDetailsState extends State<QuestDetails> {
             children: [Column(
               children: [
                 Expanded(
-                  flex: orientation == Orientation.portrait ? 5 : 3,
-                  child: SingleChildScrollView(
-                    child: Text(quest.getDescription(),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontFamily: "Balgruf",
-                      fontSize: 18
+                  flex: orientation == Orientation.portrait ? 7 : 6,
+                  child: Scrollbar(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5.0),
+                        child: Text(quest.getDescription(),
+                        style: Theme.of(context).textTheme.subtitle1,
+                        ),
                       ),
                     ),
+                    isAlwaysShown: true,
                   ),
                 ),
                 SizedBox(height: 12,),
-                Text("OBJECTIVES",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: "Balgruf",
-                      fontSize: 24,
-                      color: Theme.of(context).colorScheme.secondary
-                  ),),
+                getObjectivesText(),
                 Expanded(
-                  flex: 5,
+                  flex: 10,
                   child: Scrollbar(
                     controller: TaskListController,
                     isAlwaysShown: true,
@@ -204,7 +236,14 @@ class _QuestDetailsState extends State<QuestDetails> {
             color: Colors.black,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            child: Center(child: Text("Quest Completed", style: Theme.of(context).textTheme.headlineLarge,)),
+            child: AnimatedScale(
+                scale: questCompleted ? 1.0 : 0.5,
+                curve: Curves.decelerate,
+                duration: Duration(seconds: 2),
+                child: Center(
+                  child: Text("Quest Completed", style: Theme.of(context).textTheme.headlineLarge,)
+              )
+            ),
           ),
         ),
       )

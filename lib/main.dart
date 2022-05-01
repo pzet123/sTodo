@@ -13,7 +13,7 @@ import 'package:stodo/screens/System.dart';
 
 import 'models/Quest.dart';
 
-final int NUM_OF_SCREENS = 3;
+const int NUM_OF_SCREENS = 3;
 
 late SharedPreferences sharedPreferences;
 late List<Quest> questList;
@@ -29,13 +29,11 @@ getQuestList() async{
 
 saveQuestList() async{
   sharedPreferences.setString("quests", json.encode(questList));
-  print("HERE");
 }
 
 initialiseApp() async{
   sharedPreferences = await SharedPreferences.getInstance();
   getQuestList();
-  await sharedPreferences.setString("quests", json.encode(questList));
   FlutterNativeSplash.remove();
 }
 
@@ -77,11 +75,21 @@ void main() async{
           fontSize: 40,
           color: Color.fromARGB(255, 240, 240, 240),
         ),
+        headline5: TextStyle(
+          fontFamily: "Balgruf",
+          fontSize: 22,
+          color: Color.fromARGB(255, 240, 240, 240),
+        ),
         subtitle1: TextStyle(
           fontFamily: "Futura",
           fontSize: 26,
           color: Color.fromARGB(255, 240, 240, 240),
-        )
+        ),
+          subtitle2: TextStyle(
+            fontFamily: "Futura",
+            fontSize: 24,
+            color: Color.fromARGB(255, 240, 240, 240),
+          )
       )
     ),
   ));
@@ -123,16 +131,16 @@ class _MyAppState extends State<MyApp> {
         style: Theme.of(context).textTheme.headline1
       ),
       centerTitle: true,
-      leading: IconButton(
-        onPressed: () => changePage((pageIndex - 1) % NUM_OF_SCREENS),
-        icon: Icon(Icons.chevron_left,
-            color: Theme.of(context).colorScheme.tertiary),
-      ),
-      actions: [IconButton(
-          onPressed: () => changePage((pageIndex + 1) % NUM_OF_SCREENS),
-          icon: Icon(Icons.chevron_right,
-          color: Theme.of(context).colorScheme.tertiary)
-      )],
+      // leading: IconButton(
+      //   onPressed: () => changePage((pageIndex - 1) % NUM_OF_SCREENS),
+      //   icon: Icon(Icons.chevron_left,
+      //       color: Theme.of(context).colorScheme.tertiary),
+      // ),
+      // actions: [IconButton(
+      //     onPressed: () => changePage((pageIndex + 1) % NUM_OF_SCREENS),
+      //     icon: Icon(Icons.chevron_right,
+      //     color: Theme.of(context).colorScheme.tertiary)
+      // )],
     );
   }
 
@@ -140,6 +148,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: createAppBar("App bar"),
       body: PageView(
         controller: pageController,
@@ -147,8 +156,8 @@ class _MyAppState extends State<MyApp> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           QuestsScreen(questList: questList,),
-          GeneralStats(),
-          System(),
+          // GeneralStats(),
+          // System(),
         ],
       ),
       floatingActionButton: pageIndex == 0 ? FloatingActionButton(
