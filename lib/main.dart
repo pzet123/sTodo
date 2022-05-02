@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +15,11 @@ import 'package:stodo/screens/System.dart';
 
 import 'models/Quest.dart';
 
-const int NUM_OF_SCREENS = 3;
+const int NUM_OF_SCREENS = 2;
 
 late SharedPreferences sharedPreferences;
 late List<Quest> questList;
+bool soundOn = true;
 
 getQuestList() async{
   if(sharedPreferences.containsKey("quests")){
@@ -35,6 +38,22 @@ initialiseApp() async{
   sharedPreferences = await SharedPreferences.getInstance();
   getQuestList();
   FlutterNativeSplash.remove();
+}
+
+void playMenuSound() async{
+  if(soundOn) {
+    AudioCache player = AudioCache();
+    const String menuScrollSoundPath = "menuScroll.mp3";
+    player.play(menuScrollSoundPath);
+  }
+}
+
+void playInvalidInputSound() async{
+  if(soundOn) {
+    AudioCache player = AudioCache();
+    const String sneakAttackSoundPath = "sneakAttack.mp3";
+    player.play(sneakAttackSoundPath);
+  }
 }
 
 void main() async{
@@ -110,6 +129,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void changePage(int pageIndex) {
+    if(pageIndex < 0 || pageIndex >= NUM_OF_SCREENS){
+      playInvalidInputSound();
+    }
+    else {
+      playMenuSound();
+    }
     pageController.animateToPage(
         pageIndex,
         duration: Duration(milliseconds: 500),
@@ -122,25 +147,36 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  AppBar createAppBar(String text){
+  AppBar createAppBar(){
 
-    List<String> appBarText = ["Quests", "General Stats", "Settings"];
+    List<String> appBarText = ["QUESTS", "SYSTEM"];
 
     return AppBar(
-      title: Text(appBarText[pageIndex],
-        style: Theme.of(context).textTheme.headline1
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Transform.translate(
+              offset: Offset(0, -1),
+              child: Image.asset("assets/images/mainQuestBannerL.png", color: Colors.white, scale: 2.5,)),
+          Text(appBarText[pageIndex],
+              style: Theme.of(context).textTheme.subtitle1
+          ),
+          Transform.translate(
+              offset: Offset(0, -1),
+              child: Image.asset("assets/images/mainQuestBannerR.png", color: Colors.white, scale: 2.5,)),
+        ],
       ),
       centerTitle: true,
-      // leading: IconButton(
-      //   onPressed: () => changePage((pageIndex - 1) % NUM_OF_SCREENS),
-      //   icon: Icon(Icons.chevron_left,
-      //       color: Theme.of(context).colorScheme.tertiary),
-      // ),
-      // actions: [IconButton(
-      //     onPressed: () => changePage((pageIndex + 1) % NUM_OF_SCREENS),
-      //     icon: Icon(Icons.chevron_right,
-      //     color: Theme.of(context).colorScheme.tertiary)
-      // )],
+      leading: IconButton(
+        onPressed: () => changePage((pageIndex - 1) ),
+        icon: Icon(Icons.chevron_left,
+            color: Theme.of(context).colorScheme.tertiary),
+      ),
+      actions: [IconButton(
+          onPressed: () => changePage((pageIndex + 1) ),
+          icon: Icon(Icons.chevron_right,
+          color: Theme.of(context).colorScheme.tertiary)
+      )],
     );
   }
 
@@ -149,7 +185,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: createAppBar("App bar"),
+      appBar: createAppBar(),
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged,
@@ -157,14 +193,17 @@ class _MyAppState extends State<MyApp> {
         children: [
           QuestsScreen(questList: questList,),
           // GeneralStats(),
-          // System(),
+          System(),
         ],
       ),
       floatingActionButton: pageIndex == 0 ? FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddQuestScreen(questList))).then((_) => setState(() {}));
         },
-        child: Icon(Icons.add, color: Colors.black87,)
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset("assets/images/skyrimLogo.png"),
+        )
       ) : null,
     );
   }

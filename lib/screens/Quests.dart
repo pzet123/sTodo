@@ -8,6 +8,8 @@ import 'package:stodo/models/Quest.dart';
 import 'package:stodo/models/QuestTask.dart';
 import 'package:stodo/screens/QuestDetails.dart';
 
+import '../main.dart';
+
 
 class QuestsScreen extends StatefulWidget {
   final List<Quest> questList;
@@ -56,20 +58,11 @@ class _QuestsScreenState extends State<QuestsScreen> {
     return questTiles;
   }
 
-  void playMenuSound() async{
-    AudioCache player = AudioCache();
-    const String menuScrollSoundPath = "menuScroll.mp3";
-    player.play(menuScrollSoundPath);
-  }
-
   final double questListTileHeight = 70;
   final FixedExtentScrollController questListController = FixedExtentScrollController();
 
   @override
   Widget build(BuildContext context) {
-    double appBarHeight = Scaffold.of(context).appBarMaxHeight!;
-    print("Screen width: ${MediaQuery.of(context).size.width}");
-    print("Screen height: ${MediaQuery.of(context).size.height}");
     bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     completedQuests = getCompletedQuests();
     questTileList = getActiveQuests() + completedQuests;
@@ -80,35 +73,38 @@ class _QuestsScreenState extends State<QuestsScreen> {
           children: [
             Image(image: AssetImage(isPortrait ? "assets/images/background.png" : "assets/images/backgroundH.png"),
             height: double.infinity, width: double.infinity, fit: BoxFit.fill,),
-            questTileList.isNotEmpty ? ClickableListWheelScrollView(
-              scrollController: questListController,
-              itemCount: questTileList.length,
-              itemHeight: questListTileHeight,
-              scrollOnTap: false,
-              onItemTapCallback: (index) {
-                if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)
-                    => QuestDetails(quest: questTileList[questListController.selectedItem].quest))
-                  ).then((_) => setState(() {}));
-                } else {
-                  questListController.animateToItem(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
-                }
-              },
-              child: ListWheelScrollView.useDelegate(
-                controller: questListController,
-                itemExtent: questListTileHeight,
-                overAndUnderCenterOpacity: 0.7,
-                perspective: 0.00001,
-                useMagnifier: true,
-                magnification: 1.3,
-                physics: FixedExtentScrollPhysics(),
-                onSelectedItemChanged: (index) => playMenuSound(),
-                childDelegate: ListWheelChildBuilderDelegate(
-                  builder: (context, index) => questTileList[index],
-                  childCount: questTileList.length,
+            questTileList.isNotEmpty ? Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: ClickableListWheelScrollView(
+                scrollController: questListController,
+                itemCount: questTileList.length,
+                itemHeight: questListTileHeight,
+                scrollOnTap: false,
+                onItemTapCallback: (index) {
+                  if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)
+                      => QuestDetails(quest: questTileList[questListController.selectedItem].quest))
+                    ).then((_) => setState(() {}));
+                  } else {
+                    questListController.animateToItem(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                  }
+                },
+                child: ListWheelScrollView.useDelegate(
+                  controller: questListController,
+                  itemExtent: questListTileHeight,
+                  overAndUnderCenterOpacity: 0.7,
+                  perspective: 0.00001,
+                  useMagnifier: true,
+                  magnification: 1.3,
+                  physics: FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (index) => playMenuSound(),
+                  childDelegate: ListWheelChildBuilderDelegate(
+                    builder: (context, index) => questTileList[index],
+                    childCount: questTileList.length,
+                  ),
                 ),
-              ),
-      ) : Column(
+      ),
+            ) : Column(
         children: [
           Image.asset("assets/images/steelSword.png",
             height: MediaQuery.of(context).size.height / 2,

@@ -26,21 +26,27 @@ class _QuestDetailsState extends State<QuestDetails> {
   _QuestDetailsState({required this.quest});
 
   void playQuestUpdatedSound() async{
-    AudioCache player = AudioCache();
-    const String questUpdatedSoundPath = "questUpdate.mp3";
-    player.play(questUpdatedSoundPath);
+    if(soundOn) {
+      AudioCache player = AudioCache();
+      const String questUpdatedSoundPath = "questUpdate.mp3";
+      player.play(questUpdatedSoundPath);
+    }
   }
 
   void playQuestFinishedSound() async{
-    AudioCache player = AudioCache();
-    const String levelUpSoundPath = "levelUp.mp3";
-    player.play(levelUpSoundPath);
+    if(soundOn) {
+      AudioCache player = AudioCache();
+      const String levelUpSoundPath = "levelUp.mp3";
+      player.play(levelUpSoundPath);
+    }
   }
 
   void playQuestDeletedSound() async{
-    AudioCache player = AudioCache();
-    const String levelUpSoundPath = "itemDestroy.mp3";
-    player.play(levelUpSoundPath);
+    if(soundOn) {
+      AudioCache player = AudioCache();
+      const String levelUpSoundPath = "itemDestroy.mp3";
+      player.play(levelUpSoundPath);
+    }
   }
 
   void deleteQuest() async{
@@ -99,15 +105,17 @@ class _QuestDetailsState extends State<QuestDetails> {
             color: Color.fromARGB(255, 20, 20, 20),
           borderRadius: BorderRadius.circular(20)
         ),
-        padding: EdgeInsets.symmetric(vertical: 30),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 4),
         margin: EdgeInsets.symmetric(vertical: 10),
         child: Row(
           children: [
-            Icon((task.isCompleted()) ? Icons.brightness_1 : Icons.brightness_1_outlined, color: Theme.of(context).colorScheme.secondary,),
+            Image.asset((task.isCompleted()) ? "assets/images/taskComplete.png" : "assets/images/taskIncomplete.png", scale: 2,),
             SizedBox(width: 10,),
-            Text(task.getTaskDescription(),
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary
+            Expanded(
+              child: Text(task.getTaskDescription(),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary
+                ),
               ),
             )
           ],
@@ -149,11 +157,7 @@ class _QuestDetailsState extends State<QuestDetails> {
       children: [Scaffold(
         appBar: AppBar(
           title: Text(quest.getName(),
-          style: TextStyle(
-            fontFamily: "Balgruf",
-            fontSize: 24,
-            color: Theme.of(context).colorScheme.secondary
-            ),
+          style: Theme.of(context).textTheme.headline3
           ),
           centerTitle: true,
           actions: [
@@ -163,8 +167,8 @@ class _QuestDetailsState extends State<QuestDetails> {
           ],
         ),
         body: Container(
+          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
           color: Colors.black,
-          padding: EdgeInsets.fromLTRB(20, 10, 15, 5),
           child: Stack(
             children: [Column(
               children: [

@@ -48,15 +48,11 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   }
 
   playNewQuestSound() async{
-    AudioCache player = AudioCache();
-    const String newQuestSoundPath = "newQuest.mp3";
-    player.play(newQuestSoundPath);
-  }
-
-  playInvalidInputSound() async{
-    AudioCache player = AudioCache();
-    const String sneakAttackSoundPath = "sneakAttack.mp3";
-    player.play(sneakAttackSoundPath);
+    if(soundOn) {
+      AudioCache player = AudioCache();
+      const String newQuestSoundPath = "newQuest.mp3";
+      player.play(newQuestSoundPath);
+    }
   }
 
   bool questValid(){
@@ -127,7 +123,6 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("BUILDING");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -198,8 +193,12 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                 ),
               ),
               ElevatedButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - 40, vertical: 10)),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
+                  ),
                   onPressed: addQuest,
-                  child: Icon(Icons.add, color: Colors.white,))
+                  child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary,))
             ],
           ),
             AnimatedOpacity(
