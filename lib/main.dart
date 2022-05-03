@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,8 @@ initialiseApp() async{
   sharedPreferences = await SharedPreferences.getInstance();
   getQuestList();
   FlutterNativeSplash.remove();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown,
+                                         DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 }
 
 void playMenuSound() async{
@@ -58,6 +61,7 @@ void playInvalidInputSound() async{
 
 void main() async{
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await initialiseApp();
   runApp(MaterialApp(

@@ -89,13 +89,6 @@ class _QuestsScreenState extends State<QuestsScreen> {
                                     .selectedItem].quest))).then((_) =>
                         setState(() {}));
                   }
-                  // if(index == questListController.selectedItem || index == questListController.selectedItem - 1 || index == questListController.selectedItem + 1){
-                  //   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)
-                  //     => QuestDetails(quest: questTileList[questListController.selectedItem].quest))
-                  //   ).then((_) => setState(() {}));
-                   else {
-                    questListController.animateToItem(index, duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                  }
                 },
                 child: ListWheelScrollView.useDelegate(
                   controller: questListController,
