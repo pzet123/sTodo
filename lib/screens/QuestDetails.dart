@@ -23,7 +23,17 @@ class _QuestDetailsState extends State<QuestDetails> {
   bool questCompleted = false;
   final ScrollController TaskListController = ScrollController();
 
+  Timer _questCompletedDialogTimer = Timer(Duration(seconds: 0), () {});
+  Timer _questUpdatedDialogTimer = Timer(Duration(seconds: 0), () {});
+
   _QuestDetailsState({required this.quest});
+
+  @override
+  void dispose(){
+    _questCompletedDialogTimer.cancel();
+    _questUpdatedDialogTimer.cancel();
+    super.dispose();
+  }
 
   void playQuestUpdatedSound() async{
     if(soundOn) {
@@ -61,9 +71,8 @@ class _QuestDetailsState extends State<QuestDetails> {
     setState(() {
       questCompleted = true;
     });
-    Timer(Duration(milliseconds: 6500), () {
-      questCompleted = false;
-      Navigator.pop(context);
+    _questCompletedDialogTimer = Timer(Duration(milliseconds: 6500), () {
+    Navigator.pop(context);
     });
   }
 
@@ -71,6 +80,7 @@ class _QuestDetailsState extends State<QuestDetails> {
     task.toggleCompleted();
     setState(() {
       quest.update();
+      saveQuestList();
     });
     if(quest.isComplete()){
       finishQuest();
@@ -80,7 +90,7 @@ class _QuestDetailsState extends State<QuestDetails> {
         questUpdatedOpacity = 1.0;
         hideWidget = false;
       });
-      Timer(Duration(milliseconds: 2500), () {
+      _questUpdatedDialogTimer = Timer(Duration(milliseconds: 2500), () {
         setState(() {
           questUpdatedOpacity = 0.0;
         });

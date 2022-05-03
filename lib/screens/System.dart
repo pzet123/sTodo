@@ -23,24 +23,24 @@ class _SystemState extends State<System> {
       padding: EdgeInsets.all(20),
       color: Colors.black,
       child: Column(
-        children: [
-          ElevatedButton(
+      children: [
+        ElevatedButton(
+          style: ButtonStyle(
+            fixedSize: MaterialStateProperty.all(Size(250, 50)),
+            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiary),
+          ),
+            onPressed: toggleSound,
+            child: Text("Toggle Sound", style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.black),)),
+        SizedBox(height: 20,),
+        ElevatedButton(
             style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all(Size(250, 50)),
-              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiary),
+                fixedSize: MaterialStateProperty.all(Size(250, 50)),
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiary)
             ),
-              onPressed: toggleSound,
-              child: Text("Toggle Sound", style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.black),)),
-          SizedBox(height: 20,),
-          ElevatedButton(
-              style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(Size(250, 50)),
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiary)
-              ),
-              onPressed: rateApp,
-              child: Text("Rate the App", style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.black),))
-        ],
-      )
+            onPressed: rateApp,
+            child: Text("Rate the App", style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.black),))
+      ],
+        )
     );
   }
 }

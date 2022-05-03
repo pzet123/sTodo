@@ -23,9 +23,18 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   double questAddedTextOpacity = 0.0;
   bool _hideWidget = true;
   bool _questTitleValid = true;
-  bool _newTaskValid = true;
+
+  late Timer questAddedTimer = Timer(Duration(seconds: 0), () {});
+  late Timer questAddedTimer2 = Timer(Duration(seconds: 0), () {});
 
   List<QuestTask> newTasks = [];
+
+  @override
+  void dispose(){
+    questAddedTimer.cancel();
+    questAddedTimer2.cancel();
+    super.dispose();
+  }
 
   List<Widget> getNewTasks() {
     List<Widget> newTaskWidgets = [];
@@ -72,19 +81,19 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     if(questValid()){
       Quest newQuest = Quest(questTitleController.text, questDescriptionController.text, newTasks, false);
       widget.questList.add(newQuest);
+      saveQuestList();
       playNewQuestSound();
       setState(() {
         questAddedTextOpacity = 1.0;
         _hideWidget = false;
       });
-      Timer(Duration(seconds: 1), () {
+      questAddedTimer = Timer(Duration(seconds: 1), () {
         questTitleController.clear();
         questDescriptionController.clear();
         newTaskController.clear();
         newTasks = [];
-        saveQuestList();
       });
-      Timer(Duration(seconds: 3), () {
+      questAddedTimer2 = Timer(Duration(seconds: 3), () {
         setState(() {
           questAddedTextOpacity = 0.0;
         });

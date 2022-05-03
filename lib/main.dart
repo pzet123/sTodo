@@ -52,7 +52,7 @@ void playInvalidInputSound() async{
   if(soundOn) {
     AudioCache player = AudioCache();
     const String sneakAttackSoundPath = "sneakAttack.mp3";
-    player.play(sneakAttackSoundPath);
+    player.play(sneakAttackSoundPath, volume: 0.5);
   }
 }
 
