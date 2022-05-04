@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stodo/models/Quest.dart';
 import 'package:stodo/models/QuestTask.dart';
 import 'package:stodo/screens/QuestDetails.dart';
@@ -141,7 +142,7 @@ class QuestTile extends StatelessWidget {
         ),
           lastActive ? Transform.translate(
           offset: Offset(0, 62),
-            child: Divider(thickness: 4, color: Theme.of(context).colorScheme.tertiary, indent: 45, endIndent: 45,),
+            child: Divider(thickness: 4, color: Theme.of(context).colorScheme.tertiary, indent: 60, endIndent: 60,),
         ) : Text("")
         ]
       ),

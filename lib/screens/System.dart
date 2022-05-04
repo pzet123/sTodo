@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:stodo/main.dart';
 
 class System extends StatefulWidget {
@@ -13,9 +14,18 @@ class _SystemState extends State<System> {
   }
 
   void rateApp(){
-
+    // rateMyApp.showRateDialog(
+    //     context,
+    //     title: "Rate App",
+    //     rateButton: "RATE",
+    //     laterButton: "MAYBE LATER",
+    //     noButton: "NO",
+    //     message: "If you like this app, please take some time to review it.",
+    //     dialogStyle: DialogStyle(
+    //       messageStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black),
+    //     )
+    // );
   }
-
 
   @override
   Widget build(BuildContext context) {

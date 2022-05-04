@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stodo/models/QuestTask.dart';
 
 import '../main.dart';
@@ -129,9 +130,196 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     });
   }
 
+  Widget getPortraitLayout(){
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.all(10),
+          child: TextField(
+              maxLength: 25,
+              cursorColor: Colors.white,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  errorText: _questTitleValid ? null : "Quest title cannot be empty",
+                  hintText: "Enter Quest Name",
+                  hintStyle: Theme.of(context).textTheme.subtitle1,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                  ),
+                  labelText: "Quest Name",
+                  labelStyle: Theme.of(context).textTheme.subtitle1
+              ),
+              controller: questTitleController,
+              style: Theme.of(context).textTheme.subtitle1
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.all(10),
+          child: TextField(
+              cursorColor: Colors.white,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  hintText: "Enter Quest Description",
+                  hintStyle: Theme.of(context).textTheme.subtitle1,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                  ),
+                  labelText: "Quest Description",
+                  labelStyle: Theme.of(context).textTheme.subtitle1
+              ),
+              controller: questDescriptionController,
+              style: Theme.of(context).textTheme.subtitle1
+          ),
+        ),
+        Text("Tasks",
+            style: Theme.of(context).textTheme.headline1
+        ),
+        ElevatedButton(
+            onPressed: addTask,
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
+            ),
+            child: Text("Add a new task", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black),)),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+            borderRadius: BorderRadius.all(Radius.circular(5))
+            ),
+            child: ListView(
+              children: getNewTasks(),
+            ),
+          ),
+        ),
+        ElevatedButton(
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - 40, vertical: 10)),
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
+            ),
+            onPressed: addQuest,
+            child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary,))
+      ],
+    );
+  }
+
+  Widget getLandscapeLayout(){
+    return Column(
+      children: [
+        Expanded(
+          flex: 5,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    width: (MediaQuery.of(context).size.width / 2) - 40,
+                    child: TextField(
+                        maxLength: 25,
+                        cursorColor: Colors.white,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            counterText: "",
+                            errorText: _questTitleValid ? null : "Quest title cannot be empty",
+                            hintText: "Enter Quest Name",
+                            hintStyle: Theme.of(context).textTheme.subtitle1,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                            ),
+                            labelText: "Quest Name",
+                            labelStyle: Theme.of(context).textTheme.subtitle1
+                        ),
+                        controller: questTitleController,
+                        style: Theme.of(context).textTheme.subtitle1
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    width: (MediaQuery.of(context).size.width / 2) - 40,
+                    child: TextField(
+                        cursorColor: Colors.white,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            counterText: "",
+                            hintText: "Enter Quest Description",
+                            hintStyle: Theme.of(context).textTheme.subtitle1,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                            ),
+                            labelText: "Quest Description",
+                            labelStyle: Theme.of(context).textTheme.subtitle1
+                        ),
+                        controller: questDescriptionController,
+                        style: Theme.of(context).textTheme.subtitle1
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Text("Tasks",
+                      style: Theme.of(context).textTheme.headline1
+                  ),
+                  ElevatedButton(
+                      onPressed: addTask,
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
+                      ),
+                      child: Text("Add a new task", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black),)),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+                        borderRadius: BorderRadius.all(Radius.circular(5))
+                      ),
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: ListView(
+                        children: getNewTasks(),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton(
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - 40)),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
+              ),
+              onPressed: addQuest,
+              child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary,)),
+        ),
+        SizedBox(height: 5)
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -141,75 +329,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
       body: Container(
         color: Colors.black,
         child: Stack(
-          children: [Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                  maxLength: 25,
-                  cursorColor: Colors.white,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    errorText: _questTitleValid ? null : "Quest title cannot be empty",
-                    hintText: "Enter Quest Name",
-                    hintStyle: Theme.of(context).textTheme.subtitle1,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
-                    ),
-                    labelText: "Quest Name",
-                    labelStyle: Theme.of(context).textTheme.subtitle1
-                  ),
-                  controller: questTitleController,
-                  style: Theme.of(context).textTheme.subtitle1
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                  cursorColor: Colors.white,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    hintText: "Enter Quest Description",
-                    hintStyle: Theme.of(context).textTheme.subtitle1,
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
-                      ),
-                    labelText: "Quest Description",
-                    labelStyle: Theme.of(context).textTheme.subtitle1
-                  ),
-                  controller: questDescriptionController,
-                  style: Theme.of(context).textTheme.subtitle1
-                ),
-              ),
-              Text("Tasks",
-                style: Theme.of(context).textTheme.headline1
-              ),
-              ElevatedButton(
-                  onPressed: addTask,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
-                  ),
-                  child: Text("Add a new task", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black),)),
-              Expanded(
-                child: ListView(
-                  children: getNewTasks(),
-                ),
-              ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 2 - 40, vertical: 10)),
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary)
-                  ),
-                  onPressed: addQuest,
-                  child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary,))
-            ],
-          ),
+          children: [
+            orientation == Orientation.portrait ? getPortraitLayout() : getLandscapeLayout(),
             AnimatedOpacity(
             curve: Curves.decelerate,
             opacity: questAddedTextOpacity,

@@ -12,6 +12,7 @@ import 'package:stodo/models/QuestTask.dart';
 import 'package:stodo/screens/AddQuest.dart';
 import 'package:stodo/screens/GeneralStats.dart';
 import 'package:stodo/screens/Quests.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:stodo/screens/System.dart';
 
 import 'models/Quest.dart';
@@ -21,6 +22,13 @@ const int NUM_OF_SCREENS = 2;
 late SharedPreferences sharedPreferences;
 late List<Quest> questList;
 bool soundOn = true;
+
+RateMyApp rateMyApp = RateMyApp(
+  preferencesPrefix: "rateMyApp_",
+  minDays: 0,
+  minLaunches: 0,
+  googlePlayIdentifier: "com.pzet.nmscompanions",
+);
 
 getQuestList() async{
   if(sharedPreferences.containsKey("quests")){
@@ -38,6 +46,7 @@ saveQuestList() async{
 initialiseApp() async{
   sharedPreferences = await SharedPreferences.getInstance();
   getQuestList();
+  rateMyApp.init();
   FlutterNativeSplash.remove();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown,
                                          DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
