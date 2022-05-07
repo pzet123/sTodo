@@ -59,4 +59,13 @@ class Quest{
     return this._tasks;
   }
 
+  QuestTask? getActiveTask(){
+    for(QuestTask task in _tasks){
+      if(!task.isCompleted()){
+        return task;
+      }
+    }
+    return null;
+  }
+
 }

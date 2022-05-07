@@ -1,16 +1,13 @@
 import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stodo/models/QuestTask.dart';
 import 'package:stodo/screens/AddQuest.dart';
-import 'package:stodo/screens/GeneralStats.dart';
 import 'package:stodo/screens/Quests.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:stodo/screens/System.dart';
@@ -23,12 +20,14 @@ late SharedPreferences sharedPreferences;
 late List<Quest> questList;
 bool soundOn = true;
 
+
 RateMyApp rateMyApp = RateMyApp(
   preferencesPrefix: "rateMyApp_",
   minDays: 0,
   minLaunches: 0,
   googlePlayIdentifier: "com.pzet.nmscompanions",
 );
+
 
 getQuestList() async{
   if(sharedPreferences.containsKey("quests")){
@@ -50,6 +49,28 @@ initialiseApp() async{
   FlutterNativeSplash.remove();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown,
                                          DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
+  AwesomeNotifications().initialize(
+      "resource://drawable/res_app_icon",
+      [
+        NotificationChannel(
+            channelGroupKey: 'Quest Tracking Group',
+            channelKey: 'Quest Tracking Channel',
+            channelName: 'Quest Tracking',
+            channelDescription: 'Notification channel for your currently tracked quest.',
+            defaultColor: Colors.grey,
+            ledColor: Colors.white,
+            importance: NotificationImportance.Max)
+      ],
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupkey: 'Quest Tracking Group',
+            channelGroupName: 'Quest Tracking Group')
+      ],
+      debug: true
+  );
+
+
 }
 
 void playMenuSound() async{
@@ -138,7 +159,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     pageController = PageController();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
   }
 
   void changePage(int pageIndex) {
