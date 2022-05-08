@@ -47,7 +47,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
       }
     });
     if(questTiles.isNotEmpty && completedQuests.isNotEmpty){
-      questTiles.last = QuestTile(quest: questTiles.last.quest, lastActive: true);
+      questTiles.last = QuestTile(quest: questTiles.last.quest, lastNotComplete: true);
     }
     return questTiles;
   }
@@ -64,10 +64,6 @@ class _QuestsScreenState extends State<QuestsScreen> {
   }
 
   void selectCurrentQuest() async{
-
-    Quest selectedQuest = questTileList[questListController.selectedItem].quest;
-    createQuestTrackingNotification(questName: selectedQuest.getName(), nextTask: selectedQuest.getActiveTask()!.getTaskDescription());
-
     Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context) =>
             QuestDetails(
@@ -134,9 +130,9 @@ class _QuestsScreenState extends State<QuestsScreen> {
 
 class QuestTile extends StatelessWidget {
   final Quest quest;
-  bool lastActive;
+  bool lastNotComplete;
 
-  QuestTile({required this.quest, this.lastActive = false});
+  QuestTile({required this.quest, this.lastNotComplete = false});
 
 
 
@@ -145,11 +141,19 @@ class QuestTile extends StatelessWidget {
     return Center(
       child: Stack(
         children: [Center(
-          child: Text(quest.getName(),
-            style: !quest.isComplete() ? Theme.of(context).textTheme.headline1 : Theme.of(context).textTheme.headline2
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              quest.isActive() ? SizedBox(width: 25,) : Text(""),
+              Text(quest.getName(),
+                style: !quest.isComplete() ? Theme.of(context).textTheme.headline1 : Theme.of(context).textTheme.headline2
+                ),
+              quest.isActive() ? SizedBox(width: 5,) : Text(""),
+              quest.isActive() ? Image.asset("assets/images/activeQuestMarker.png") : Text(""),
+            ],
+          ),
         ),
-          lastActive ? Transform.translate(
+          lastNotComplete ? Transform.translate(
           offset: Offset(0, 62),
             child: Divider(thickness: 4, color: Theme.of(context).colorScheme.tertiary, indent: 60, endIndent: 60,),
         ) : Text("")

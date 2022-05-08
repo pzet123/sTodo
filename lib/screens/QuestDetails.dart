@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:stodo/main.dart';
 import 'package:stodo/models/QuestTask.dart';
 
+import '../components/Notifications.dart';
 import '../models/Quest.dart';
 
 class QuestDetails extends StatefulWidget {
@@ -64,6 +66,7 @@ class _QuestDetailsState extends State<QuestDetails> {
     questList.remove(quest);
     saveQuestList();
     playQuestDeletedSound();
+    removeActiveQuest();
     Navigator.pop(context);
   }
 
@@ -72,6 +75,7 @@ class _QuestDetailsState extends State<QuestDetails> {
     setState(() {
       questCompleted = true;
     });
+    removeActiveQuest();
     _questCompletedDialogTimer = Timer(Duration(milliseconds: 6500), () {
     Navigator.pop(context);
     });
@@ -81,6 +85,7 @@ class _QuestDetailsState extends State<QuestDetails> {
     task.toggleCompleted();
     setState(() {
       quest.update();
+      if(quest.isComplete() && quest.isActive()) quest.toggleActive();
       saveQuestList();
     });
     if(quest.isComplete()){
@@ -159,6 +164,19 @@ class _QuestDetailsState extends State<QuestDetails> {
     ]
     );
   }
+
+  void makeActiveQuest() {
+    setState(() {
+      activeQuest = quest;
+      quest.toggleActive();
+      for(Quest diffQuest in questList){
+        if(diffQuest != quest) diffQuest.setActive(false);
+      }
+      saveQuestList();
+      saveActiveQuest();
+    });
+    createQuestTrackingNotification(questName: quest.getName(), nextTask: quest.getActiveTask()!.getTaskDescription());
+  }
   
 
   @override
@@ -183,6 +201,16 @@ class _QuestDetailsState extends State<QuestDetails> {
           child: Stack(
             children: [Column(
               children: [
+                quest.isActive() || quest.isComplete() ?
+                Text("") :
+                ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                    ),
+                    onPressed: makeActiveQuest,
+                    child: Text("Make Active Quest",
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),)
+                ),
                 Expanded(
                   flex: quest.getDescription().isEmpty ? 0 : (orientation == Orientation.portrait ? 7 : 6),
                   child: Scrollbar(

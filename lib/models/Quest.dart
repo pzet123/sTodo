@@ -1,31 +1,47 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:stodo/models/QuestTask.dart';
 
 class Quest{
   List<QuestTask> _tasks;
   bool _isComplete;
+  bool _isActive;
   String _name;
   String _description;
+  String _key;
 
-  Quest(this._name, this._description, this._tasks, this._isComplete);
+
+  Quest(this._name, this._description, this._tasks, this._isComplete, this._isActive) : _key = UniqueKey().toString();
 
   Quest.fromJson(Map<String, dynamic> jsonMap) :
       _name = jsonMap["name"],
       _isComplete = jsonMap["isComplete"] == "true",
+      _isActive = jsonMap["isActive"] == "true",
       _tasks = (json.decode(jsonMap["tasks"]) as List<dynamic>).map((e) => QuestTask.fromJson(e)).toList(),
-      _description = jsonMap["description"];
+      _description = jsonMap["description"],
+        _key = jsonMap["key"];
 
 
   Map<String, dynamic> toJson() => {
     "name": _name,
     "isComplete" : _isComplete.toString(),
+    "isActive" : _isActive.toString(),
     "tasks" : json.encode(_tasks),
-    "description" : _description
+    "description" : _description,
+    "key" : _key,
   };
 
   bool isComplete(){
     return _isComplete;
+  }
+
+  bool isActive() {
+    return _isActive;
+  }
+
+  void toggleActive() {
+    _isActive = !_isActive;
   }
 
   void setComplete(bool isComplete){
@@ -34,6 +50,10 @@ class Quest{
 
   void setName(String name){
     _name = name;
+  }
+
+  void setActive(bool active){
+    _isActive = active;
   }
 
   void update(){
@@ -48,15 +68,19 @@ class Quest{
   }
 
   String getName(){
-    return this._name;
+    return _name;
   }
 
   String getDescription(){
-    return this._description;
+    return _description;
+  }
+
+  String getKey(){
+    return _key;
   }
 
   List<QuestTask> getTasks(){
-    return this._tasks;
+    return _tasks;
   }
 
   QuestTask? getActiveTask(){
@@ -66,6 +90,10 @@ class Quest{
       }
     }
     return null;
+  }
+
+  bool operator ==(dynamic quest) {
+    return (quest is Quest) && (quest.getKey() == _key) && (quest.getName() == _name);
   }
 
 }

@@ -7,6 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stodo/components/Notifications.dart';
+import 'package:stodo/models/QuestTask.dart';
 import 'package:stodo/screens/AddQuest.dart';
 import 'package:stodo/screens/Quests.dart';
 import 'package:rate_my_app/rate_my_app.dart';
@@ -18,6 +20,7 @@ const int NUM_OF_SCREENS = 2;
 
 late SharedPreferences sharedPreferences;
 late List<Quest> questList;
+Quest? activeQuest;
 bool soundOn = true;
 
 
@@ -36,10 +39,28 @@ getQuestList() async{
   } else {
     questList = [];
   }
+  if(sharedPreferences.containsKey("activeQuest") && questList.length > 0){
+    activeQuest = Quest.fromJson(json.decode(sharedPreferences.getString("activeQuest")!));
+    if(questList.contains(activeQuest)){
+      activeQuest = questList[questList.indexOf(activeQuest!)];
+      createQuestTrackingNotification(questName: activeQuest?.getName(), nextTask: activeQuest?.getActiveTask()!.getTaskDescription());
+    } else {
+      activeQuest = null;
+    }
+  }
+
 }
 
 saveQuestList() async{
   sharedPreferences.setString("quests", json.encode(questList));
+}
+
+saveActiveQuest() async{
+  sharedPreferences.setString("activeQuest", json.encode(activeQuest));
+}
+
+removeActiveQuest() async{
+  sharedPreferences.remove("activeQuest");
 }
 
 initialiseApp() async{
@@ -58,7 +79,7 @@ initialiseApp() async{
             channelKey: 'Quest Tracking Channel',
             channelName: 'Quest Tracking',
             channelDescription: 'Notification channel for your currently tracked quest.',
-            defaultColor: Colors.grey,
+            defaultColor: Colors.black,
             ledColor: Colors.white,
             importance: NotificationImportance.Max)
       ],
