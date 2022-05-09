@@ -65,7 +65,7 @@ removeActiveQuest() async{
 
 initialiseApp() async{
   sharedPreferences = await SharedPreferences.getInstance();
-  getQuestList();
+  await getQuestList();
   rateMyApp.init();
   FlutterNativeSplash.remove();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown,

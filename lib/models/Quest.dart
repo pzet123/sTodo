@@ -20,7 +20,7 @@ class Quest{
       _isActive = jsonMap["isActive"] == "true",
       _tasks = (json.decode(jsonMap["tasks"]) as List<dynamic>).map((e) => QuestTask.fromJson(e)).toList(),
       _description = jsonMap["description"],
-        _key = jsonMap["key"];
+      _key = jsonMap["key"];
 
 
   Map<String, dynamic> toJson() => {

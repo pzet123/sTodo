@@ -13,6 +13,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import '../components/Notifications.dart';
 import '../main.dart';
 
+late Image activeQuestIcon;
 
 class QuestsScreen extends StatefulWidget {
   final List<Quest> questList;
@@ -37,6 +38,13 @@ class _QuestsScreenState extends State<QuestsScreen> {
   void initState() {
     completedQuests = getCompletedQuests();
     questTileList = getActiveQuests() + completedQuests;
+    activeQuestIcon = Image.asset("assets/images/activeQuestMarker.png");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(activeQuestIcon.image, context);
   }
 
   List<QuestTile> getActiveQuests(){
@@ -149,7 +157,7 @@ class QuestTile extends StatelessWidget {
                 style: !quest.isComplete() ? Theme.of(context).textTheme.headline1 : Theme.of(context).textTheme.headline2
                 ),
               quest.isActive() ? SizedBox(width: 5,) : Text(""),
-              quest.isActive() ? Image.asset("assets/images/activeQuestMarker.png") : Text(""),
+              quest.isActive() ? activeQuestIcon : Text(""),
             ],
           ),
         ),
