@@ -120,8 +120,9 @@ class _QuestsScreenState extends State<QuestsScreen> {
                 ),
       ),
             ) : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/steelSword.png",
+          Image.asset("assets/images/helmet.png",
             height: MediaQuery.of(context).size.height / 2,
             width: MediaQuery.of(context).size.width / 2,
           ),

@@ -14,17 +14,17 @@ class _SystemState extends State<System> {
   }
 
   void rateApp(){
-    // rateMyApp.showRateDialog(
-    //     context,
-    //     title: "Rate App",
-    //     rateButton: "RATE",
-    //     laterButton: "MAYBE LATER",
-    //     noButton: "NO",
-    //     message: "If you like this app, please take some time to review it.",
-    //     dialogStyle: DialogStyle(
-    //       messageStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black),
-    //     )
-    // );
+    rateMyApp.showRateDialog(
+        context,
+        title: "Rate App",
+        rateButton: "RATE",
+        laterButton: "MAYBE LATER",
+        noButton: "NO",
+        message: "If you like this app, please take some time to review it.",
+        dialogStyle: DialogStyle(
+          messageStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black),
+        )
+    );
   }
 
   @override

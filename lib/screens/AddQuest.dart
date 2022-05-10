@@ -311,7 +311,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
               onPressed: addQuest,
               child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary,)),
         ),
-        SizedBox(height: 5)
+        SizedBox(height: 10)
       ],
     );
   }
