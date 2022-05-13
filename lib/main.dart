@@ -28,7 +28,7 @@ RateMyApp rateMyApp = RateMyApp(
   preferencesPrefix: "rateMyApp_",
   minDays: 0,
   minLaunches: 0,
-  googlePlayIdentifier: "com.pzet.nmscompanions",
+  googlePlayIdentifier: "com.app.stodo",
 );
 
 
