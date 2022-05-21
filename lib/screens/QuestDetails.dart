@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:stodo/main.dart';
 import 'package:stodo/models/QuestTask.dart';
 
@@ -32,37 +30,37 @@ class _QuestDetailsState extends State<QuestDetails> {
   _QuestDetailsState({required this.quest});
 
   @override
-  void dispose(){
+  void dispose() {
     _questCompletedDialogTimer.cancel();
     _questUpdatedDialogTimer.cancel();
     super.dispose();
   }
 
-  void playQuestUpdatedSound() async{
-    if(soundOn) {
-      AudioCache player = AudioCache();
-      const String questUpdatedSoundPath = "questUpdate.mp3";
-      player.play(questUpdatedSoundPath);
+  void playQuestUpdatedSound() async {
+    if (soundOn) {
+      final player = AudioPlayer();
+      player.setAsset("assets/questUpdate.mp3", preload: true);
+      player.play();
     }
   }
 
-  void playQuestFinishedSound() async{
-    if(soundOn) {
-      AudioCache player = AudioCache();
-      const String levelUpSoundPath = "levelUp.mp3";
-      player.play(levelUpSoundPath);
+  void playQuestFinishedSound() async {
+    if (soundOn) {
+      final player = AudioPlayer();
+      player.setAsset("assets/levelUp.mp3", preload: true);
+      player.play();
     }
   }
 
-  void playQuestDeletedSound() async{
-    if(soundOn) {
-      AudioCache player = AudioCache();
-      const String levelUpSoundPath = "itemDestroy.mp3";
-      player.play(levelUpSoundPath);
+  void playQuestDeletedSound() async {
+    if (soundOn) {
+      final player = AudioPlayer();
+      player.setAsset("assets/itemDestroy.mp3", preload: true);
+      player.play();
     }
   }
 
-  void deleteQuest() async{
+  void deleteQuest() async {
     questList.remove(quest);
     saveQuestList();
     playQuestDeletedSound();
@@ -70,27 +68,27 @@ class _QuestDetailsState extends State<QuestDetails> {
     Navigator.pop(context);
   }
 
-  void finishQuest(){
+  void finishQuest() {
     playQuestFinishedSound();
     setState(() {
       questCompleted = true;
     });
     removeActiveQuest();
     _questCompletedDialogTimer = Timer(Duration(milliseconds: 6500), () {
-    Navigator.pop(context);
+      Navigator.pop(context);
     });
   }
 
-  void updateQuest(QuestTask task) async{
+  void updateQuest(QuestTask task) async {
     task.toggleCompleted();
     setState(() {
       quest.update();
-      if(quest.isComplete() && quest.isActive()) quest.toggleActive();
+      if (quest.isComplete() && quest.isActive()) quest.toggleActive();
       saveQuestList();
     });
-    if(quest.isComplete()){
+    if (quest.isComplete()) {
       finishQuest();
-    } else if(task.isCompleted()){
+    } else if (task.isCompleted()) {
       playQuestUpdatedSound();
       setState(() {
         questUpdatedOpacity = 1.0;
@@ -104,34 +102,40 @@ class _QuestDetailsState extends State<QuestDetails> {
     }
   }
 
-  String getNextTask(){
-    for(QuestTask task in quest.getTasks()){
-      if(!task.isCompleted()){
+  String getNextTask() {
+    for (QuestTask task in quest.getTasks()) {
+      if (!task.isCompleted()) {
         return task.getTaskDescription();
       }
     }
     return "";
   }
 
-  Widget getTaskTile(QuestTask task){
+  Widget getTaskTile(QuestTask task) {
     return GestureDetector(
       onTap: () => updateQuest(task),
       child: Container(
         decoration: BoxDecoration(
             color: Color.fromARGB(255, 20, 20, 20),
-          borderRadius: BorderRadius.circular(20)
-        ),
+            borderRadius: BorderRadius.circular(20)),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 4),
         margin: EdgeInsets.symmetric(vertical: 10),
         child: Row(
           children: [
-            Image.asset((task.isCompleted()) ? "assets/images/taskComplete.png" : "assets/images/taskIncomplete.png", scale: 2,),
-            SizedBox(width: 10,),
+            Image.asset(
+              (task.isCompleted())
+                  ? "assets/images/taskComplete.png"
+                  : "assets/images/taskIncomplete.png",
+              scale: 2,
+            ),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
-              child: Text(task.getTaskDescription(),
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary
-                ),
+              child: Text(
+                task.getTaskDescription(),
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
             )
           ],
@@ -139,93 +143,109 @@ class _QuestDetailsState extends State<QuestDetails> {
       ),
     );
   }
-  
+
   List<Widget> getQuestTaskTiles() {
     List<Widget> questTaskTiles = [];
-    for(QuestTask task in quest.getTasks()){
+    for (QuestTask task in quest.getTasks()) {
       questTaskTiles.add(getTaskTile(task));
     }
     return questTaskTiles;
   }
 
   Widget getObjectivesText() {
-    return Stack(
-      children: [
-        Transform.translate(
-            offset: Offset(-83, 7),
-            child: Image.asset("assets/images/miscQuestBannerL.png", color: Colors.white, scale: 2.2,)
-        ),
-        Text("OBJECTIVES",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5,),
-        Transform.translate(
-            offset: Offset(137, 7),
-            child: Image.asset("assets/images/miscQuestBannerR.png", color: Colors.white, scale: 2.2))
-    ]
-    );
+    return Stack(children: [
+      Transform.translate(
+          offset: Offset(-83, 7),
+          child: Image.asset(
+            "assets/images/miscQuestBannerL.png",
+            color: Colors.white,
+            scale: 2.2,
+          )),
+      Text(
+        "OBJECTIVES",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      Transform.translate(
+          offset: Offset(137, 7),
+          child: Image.asset("assets/images/miscQuestBannerR.png",
+              color: Colors.white, scale: 2.2))
+    ]);
   }
 
   void makeActiveQuest() {
     setState(() {
       activeQuest = quest;
       quest.toggleActive();
-      for(Quest diffQuest in questList){
-        if(diffQuest != quest) diffQuest.setActive(false);
+      for (Quest diffQuest in questList) {
+        if (diffQuest != quest) diffQuest.setActive(false);
       }
       saveQuestList();
       saveActiveQuest();
     });
-    createQuestTrackingNotification(questName: quest.getName(), nextTask: quest.getActiveTask()!.getTaskDescription());
+    createQuestTrackingNotification(
+        questName: quest.getName(), nextTask: quest.getActiveTask());
   }
-  
 
   @override
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
-    return Stack(
-      children: [Scaffold(
+    return Stack(children: [
+      Scaffold(
         appBar: AppBar(
           title: Text(quest.getName(),
-          style: Theme.of(context).textTheme.headline3
-          ),
+              style: Theme.of(context).textTheme.headline3),
           centerTitle: true,
           actions: [
             IconButton(
                 onPressed: () => deleteQuest(),
-                icon: Icon(Icons.close_sharp, color: Theme.of(context).colorScheme.secondary,))
+                icon: Icon(
+                  Icons.close_sharp,
+                  color: Theme.of(context).colorScheme.secondary,
+                ))
           ],
         ),
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
           color: Colors.black,
-          child: Stack(
-            children: [Column(
+          child: Stack(children: [
+            Column(
               children: [
-                quest.isActive() || quest.isComplete() ?
-                Text("") :
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
-                    ),
-                    onPressed: makeActiveQuest,
-                    child: Text("Make Active Quest",
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),)
-                ),
+                quest.isActive() || quest.isComplete()
+                    ? Text("")
+                    : ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondary),
+                        ),
+                        onPressed: makeActiveQuest,
+                        child: Text(
+                          "Set Active Quest",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5!
+                              .copyWith(color: Colors.black),
+                        )),
                 Expanded(
-                  flex: quest.getDescription().isEmpty ? 0 : (orientation == Orientation.portrait ? 7 : 6),
+                  flex: quest.getDescription().isEmpty
+                      ? 0
+                      : (orientation == Orientation.portrait ? 7 : 6),
                   child: Scrollbar(
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: EdgeInsets.only(right: 5.0),
-                        child: Text(quest.getDescription(),
-                        style: Theme.of(context).textTheme.subtitle1,
+                        child: Text(
+                          quest.getDescription(),
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
                     ),
                     isAlwaysShown: true,
                   ),
                 ),
-                SizedBox(height: 12,),
+                SizedBox(
+                  height: 12,
+                ),
                 getObjectivesText(),
                 Expanded(
                   flex: 10,
@@ -240,33 +260,38 @@ class _QuestDetailsState extends State<QuestDetails> {
                 ),
               ],
             ),
-              AnimatedOpacity(
-                curve: Curves.decelerate,
-                opacity: questUpdatedOpacity,
-                duration: Duration(seconds: 1),
-                onEnd: () => setState(() {
-                  if(questUpdatedOpacity == 0.0) {
-                    hideWidget = true;
-                  }
-                }),
-                child: Transform.translate(
-                  offset: hideWidget ? Offset(-5000, -5000) : Offset(0, 0),
-                  child: Container(
-                    color: Colors.black,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Quest Updated", style: Theme.of(context).textTheme.headlineLarge,),
-                        Text("Next Task: ${getNextTask()}", style: Theme.of(context).textTheme.subtitle1,),
-                      ],
-                    ),
+            AnimatedOpacity(
+              curve: Curves.decelerate,
+              opacity: questUpdatedOpacity,
+              duration: Duration(seconds: 1),
+              onEnd: () => setState(() {
+                if (questUpdatedOpacity == 0.0) {
+                  hideWidget = true;
+                }
+              }),
+              child: Transform.translate(
+                offset: hideWidget ? Offset(-5000, -5000) : Offset(0, 0),
+                child: Container(
+                  color: Colors.black,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Quest Updated",
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                      Text(
+                        "Next Task: ${getNextTask()}",
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ]
-          ),
+            ),
+          ]),
         ),
       ),
       AnimatedOpacity(
@@ -284,13 +309,13 @@ class _QuestDetailsState extends State<QuestDetails> {
                 curve: Curves.decelerate,
                 duration: Duration(seconds: 2),
                 child: Center(
-                  child: Text("Quest Completed", style: Theme.of(context).textTheme.headlineLarge,)
-              )
-            ),
+                    child: Text(
+                  "Quest Completed",
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ))),
           ),
         ),
       )
-    ]
-    );
+    ]);
   }
 }

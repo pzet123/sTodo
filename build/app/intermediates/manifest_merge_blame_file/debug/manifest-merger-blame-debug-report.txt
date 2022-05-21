@@ -1,0 +1,138 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.app.stodo"
+4    android:versionCode="2"
+5    android:versionName="1.1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="31" />
+10    <!--
+11         Flutter needs it to communicate with the running application
+12         to allow setting breakpoints, to provide hot reload, etc.
+13    -->
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/android/app/src/debug/AndroidManifest.xml:6:5-66
+14-->/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/android/app/src/debug/AndroidManifest.xml:6:22-64
+15    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+15-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-81
+15-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:7:22-78
+16    <uses-permission android:name="android.permission.VIBRATE" />
+16-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-66
+16-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:8:22-63
+17    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+17-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:9:5-81
+17-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:9:22-78
+18    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+18-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:10:5-79
+18-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:10:22-76
+19    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+19-->[com.google.android.exoplayer:exoplayer-core:2.15.0] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/1c8029bc9c6470bdd4331a8beb2ed60c/jetified-exoplayer-core-2.15.0/AndroidManifest.xml:24:5-79
+19-->[com.google.android.exoplayer:exoplayer-core:2.15.0] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/1c8029bc9c6470bdd4331a8beb2ed60c/jetified-exoplayer-core-2.15.0/AndroidManifest.xml:24:22-76
+20
+21    <queries>
+21-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:24:5-34:15
+22        <intent>
+22-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:25:9-27:18
+23            <action android:name="android.media.browse.MediaBrowserService" />
+23-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:26:13-79
+23-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:26:21-76
+24        </intent>
+25        <intent>
+25-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:28:9-30:18
+26            <action android:name="androidx.media2.session.MediaSessionService" />
+26-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:29:13-82
+26-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:29:21-79
+27        </intent>
+28        <intent>
+28-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:31:9-33:18
+29            <action android:name="androidx.media2.session.MediaLibraryService" />
+29-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:32:13-82
+29-->[androidx.media2:media2-session:1.1.3] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/AndroidManifest.xml:32:21-79
+30        </intent>
+31    </queries>
+32
+33    <application
+34        android:name="android.app.Application"
+35        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+35-->[androidx.core:core:1.6.0] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/AndroidManifest.xml:24:18-86
+36        android:debuggable="true"
+37        android:icon="@mipmap/launcher_icon"
+38        android:label="Quest Log" >
+39        <activity
+40            android:name="com.app.stodo.MainActivity"
+41            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+42            android:exported="true"
+43            android:hardwareAccelerated="true"
+44            android:launchMode="singleTop"
+45            android:theme="@style/LaunchTheme"
+46            android:windowSoftInputMode="adjustResize" >
+47
+48            <!--
+49                 Specifies an Android theme to apply to this Activity as soon as
+50                 the Android process has started. This theme is visible to the user
+51                 while the Flutter UI initializes. After that, this theme continues
+52                 to determine the Window background behind the Flutter UI.
+53            -->
+54            <meta-data
+55                android:name="io.flutter.embedding.android.NormalTheme"
+56                android:resource="@style/NormalTheme" />
+57
+58            <intent-filter>
+59                <action android:name="android.intent.action.MAIN" />
+60
+61                <category android:name="android.intent.category.LAUNCHER" />
+62            </intent-filter>
+63        </activity>
+64        <!--
+65             Don't delete the meta-data below.
+66             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+67        -->
+68        <meta-data
+69            android:name="flutterEmbedding"
+70            android:value="2" />
+71
+72        <receiver
+72-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:13:9-15:40
+73            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
+73-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:14:13-97
+74            android:exported="false" />
+74-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:15:13-37
+75        <receiver
+75-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:16:9-25:20
+76            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+76-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:17:13-101
+77            android:exported="false" >
+77-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:18:13-37
+78            <intent-filter>
+78-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:19:13-24:29
+79                <action android:name="android.intent.action.BOOT_COMPLETED" />
+79-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:20:17-79
+79-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:20:25-76
+80                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+80-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:21:17-84
+80-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:21:25-81
+81                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+81-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:22:17-82
+81-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:22:25-79
+82                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+82-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:23:17-82
+82-->[:flutter_local_notifications] /Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/flutter_local_notifications/intermediates/library_manifest/debug/AndroidManifest.xml:23:25-79
+83            </intent-filter>
+84        </receiver>
+85
+86        <uses-library
+86-->[androidx.window:window:1.0.0-beta04] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+87            android:name="androidx.window.extensions"
+87-->[androidx.window:window:1.0.0-beta04] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+88            android:required="false" />
+88-->[androidx.window:window:1.0.0-beta04] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+89        <uses-library
+89-->[androidx.window:window:1.0.0-beta04] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+90            android:name="androidx.window.sidecar"
+90-->[androidx.window:window:1.0.0-beta04] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+91            android:required="false" />
+91-->[androidx.window:window:1.0.0-beta04] /Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+92    </application>
+93
+94</manifest>
