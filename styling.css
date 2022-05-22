@@ -1,0 +1,40 @@
+@font-face {
+    font-family: "Balgruf";
+    src: url(assets/fonts/Balgruf-JRye7.ttf);
+}
+
+@font-face {
+    font-family: "Futura-condensed";
+    src: url(assets/fonts/futura-condensed.otf);
+}
+
+*{
+    color: whitesmoke;
+    font-family: "Futura-condensed";
+    text-align: center;
+}
+
+html{
+    padding: 0px 20px 0px 20px;
+    background-color: black;
+}
+
+p{
+    font-size: 20px;
+}
+
+#title{
+    text-align: center;
+    font-size: 68px;
+    font-family: "Balgruf";
+}
+
+#showcaseImg{
+    width: 30%;
+}
+
+@media screen and (max-width: 768px) {
+    #showcaseImg{
+        width: 50%;
+    }
+}

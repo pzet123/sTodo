@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>stodo.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>bitcode</key>
+			<false/>
+			<key>buildNumber</key>
+			<string>2</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>E998A1017D69872FC7A6F657707D921DAC95454B</string>
+				<key>dateExpires</key>
+				<string>21/05/2023</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>bitcode</key>
+					<false/>
+					<key>buildNumber</key>
+					<string>2</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>E998A1017D69872FC7A6F657707D921DAC95454B</string>
+						<key>dateExpires</key>
+						<string>21/05/2023</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>App.framework</string>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>RQK6A38N36</string>
+						<key>name</key>
+						<string>Piotr Zychlinski</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>bitcode</key>
+					<false/>
+					<key>buildNumber</key>
+					<string>2</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>E998A1017D69872FC7A6F657707D921DAC95454B</string>
+						<key>dateExpires</key>
+						<string>21/05/2023</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Flutter.framework</string>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>RQK6A38N36</string>
+						<key>name</key>
+						<string>Piotr Zychlinski</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.1.0</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>RQK6A38N36.com.app.stodoa</string>
+				<key>beta-reports-active</key>
+				<true/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>RQK6A38N36</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>Runner.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>c2b549d0-87da-4d6c-8337-cdb93350aee7</string>
+				<key>dateExpires</key>
+				<string>21/05/2023</string>
+				<key>name</key>
+				<string>iOS Team Store Provisioning Profile: com.app.stodoa</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>RQK6A38N36</string>
+				<key>name</key>
+				<string>Piotr Zychlinski</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>
