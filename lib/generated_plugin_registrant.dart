@@ -4,7 +4,6 @@
 
 // ignore_for_file: directives_ordering
 // ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: depend_on_referenced_packages
 
 import 'package:audio_session/audio_session_web.dart';
 import 'package:flutter_native_splash/flutter_native_splash_web.dart';
