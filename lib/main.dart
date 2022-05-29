@@ -100,6 +100,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await initialiseApp();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: MyApp(),
     theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
