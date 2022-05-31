@@ -9,7 +9,9 @@ class System extends StatefulWidget {
 
 class _SystemState extends State<System> {
   void toggleSound() {
-    soundOn = !soundOn;
+    setState(() {
+      soundOn = !soundOn;
+    });
   }
 
   // void rateApp() {
@@ -32,16 +34,16 @@ class _SystemState extends State<System> {
         padding: EdgeInsets.all(20),
         color: Colors.black,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ElevatedButton(
                 style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(Size(250, 50)),
                   backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.tertiary),
+                      Theme.of(context).colorScheme.secondary),
                 ),
                 onPressed: toggleSound,
                 child: Text(
-                  "Toggle Sound",
+                  soundOn ? "Mute Audio" : "Activate Audio",
                   style: Theme.of(context)
                       .textTheme
                       .headline1
@@ -54,7 +56,7 @@ class _SystemState extends State<System> {
             //     style: ButtonStyle(
             //         fixedSize: MaterialStateProperty.all(Size(250, 50)),
             //         backgroundColor: MaterialStateProperty.all(
-            //             Theme.of(context).colorScheme.tertiary)),
+            //             Theme.of(context).colorScheme.secondary)),
             //     onPressed: rateApp,
             //     child: Text(
             //       "Rate the App",

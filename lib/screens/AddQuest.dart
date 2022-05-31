@@ -9,11 +9,12 @@ import '../models/Quest.dart';
 
 class AddQuestScreen extends StatefulWidget {
   List<Quest> questList;
+  Quest? questToEdit;
 
-  AddQuestScreen(this.questList);
+  AddQuestScreen(this.questList, this.questToEdit);
 
   @override
-  _AddQuestScreenState createState() => _AddQuestScreenState();
+  _AddQuestScreenState createState() => _AddQuestScreenState(this.questToEdit);
 }
 
 class _AddQuestScreenState extends State<AddQuestScreen> {
@@ -23,11 +24,23 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   double questAddedTextOpacity = 0.0;
   bool _hideWidget = true;
   bool _questTitleValid = true;
+  bool _editingQuest = false;
 
+  late Quest questToEdit;
   late Timer questAddedTimer = Timer(Duration(seconds: 0), () {});
   late Timer questAddedTimer2 = Timer(Duration(seconds: 0), () {});
 
   List<QuestTask> newTasks = [];
+
+  _AddQuestScreenState(Quest? questToEdit){
+    _editingQuest = questToEdit != null;
+    if(_editingQuest){
+      this.questToEdit = questToEdit!;
+      questTitleController.text = questToEdit.getName();
+      questDescriptionController.text = questToEdit.getDescription();
+      newTasks = questToEdit.getTasks();
+    }
+  }
 
   @override
   void dispose() {
@@ -83,11 +96,21 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
 
   void addQuest() async {
     if (questValid()) {
-      Quest newQuest = Quest(questTitleController.text,
-          questDescriptionController.text, newTasks, false, false);
-      widget.questList.add(newQuest);
-      saveQuestList();
-      playNewQuestSound();
+      if(!_editingQuest){
+        Quest newQuest = Quest(questTitleController.text,
+            questDescriptionController.text, newTasks, false, false);
+        widget.questList.add(newQuest);
+        playNewQuestSound();
+        saveQuestList();
+      }
+      if(_editingQuest){
+        questToEdit.setName(questTitleController.text);
+        questToEdit.setDescription(questDescriptionController.text);
+        questToEdit.setTasks(newTasks);
+        playMenuSound();
+        saveQuestList();
+        Navigator.pop(context);
+      }
       setState(() {
         questAddedTextOpacity = 1.0;
         _hideWidget = false;
@@ -114,8 +137,10 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Add a Task"),
+            title: Text("Add a Task", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black)),
             content: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              keyboardAppearance: Brightness.dark,
               controller: newTaskController,
               style: Theme.of(context)
                   .textTheme
@@ -154,6 +179,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
         Container(
           margin: EdgeInsets.all(10),
           child: TextField(
+              textCapitalization: TextCapitalization.words,
+              keyboardAppearance: Brightness.dark,
               maxLength: 25,
               cursorColor: Colors.white,
               textAlign: TextAlign.center,
@@ -176,6 +203,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
         Container(
           margin: EdgeInsets.all(10),
           child: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              keyboardAppearance: Brightness.dark,
               cursorColor: Colors.white,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
@@ -225,7 +254,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                 backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondary)),
             onPressed: addQuest,
-            child: Text("Add Quest", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black),)
+            child: Text(_editingQuest ? "Edit Quest" : "Add Quest", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black),)
         ),
         SizedBox(height: 20,)
       ],
@@ -249,6 +278,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: (MediaQuery.of(context).size.width / 2) - 40,
                     child: TextField(
+                        textCapitalization: TextCapitalization.words,
+                        keyboardAppearance: Brightness.dark,
                         maxLength: 25,
                         cursorColor: Colors.white,
                         textAlign: TextAlign.center,
@@ -278,6 +309,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: (MediaQuery.of(context).size.width / 2) - 40,
                     child: TextField(
+                        textCapitalization: TextCapitalization.sentences,
+                        keyboardAppearance: Brightness.dark,
                         cursorColor: Colors.white,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
@@ -344,7 +377,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                   backgroundColor: MaterialStateProperty.all(
                       Theme.of(context).colorScheme.secondary)),
               onPressed: addQuest,
-              child: Text("Add Quest", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black),)
+              child: Text(_editingQuest ? "Edit Quest" : "Add Quest", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black),)
           ),
         ),
         SizedBox(height: 10)
@@ -359,7 +392,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          "Start a New Quest",
+          (_editingQuest) ? "Edit Quest" : "Start a New Quest",
           style: Theme.of(context).textTheme.headline3,
         ),
         centerTitle: true,

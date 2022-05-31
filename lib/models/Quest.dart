@@ -52,6 +52,14 @@ class Quest{
     _name = name;
   }
 
+  void setDescription(String description){
+    _description = description;
+  }
+
+  void setTasks(List<QuestTask> tasks){
+    _tasks = tasks;
+  }
+
   void setActive(bool active){
     _isActive = active;
   }

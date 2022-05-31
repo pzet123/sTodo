@@ -28,7 +28,7 @@ bool soundOn = true;
 //   minDays: 0,
 //   minLaunches: 0,
 //   googlePlayIdentifier: "com.app.stodo",
-//   appStoreIdentifier: "com.app.stodo"
+//   appStoreIdentifier: "1625568037"
 // );
 
 getQuestList() async {
@@ -240,7 +240,7 @@ class _MyAppState extends State<MyApp> {
                 Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddQuestScreen(questList)))
+                            builder: (context) => AddQuestScreen(questList, null)))
                     .then((_) => setState(() {}));
               },
               child: Padding(

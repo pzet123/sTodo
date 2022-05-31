@@ -144,7 +144,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        AddQuestScreen(questList)))
+                                        AddQuestScreen(questList, null)))
                             .then((_) => setState(() {}));
                       },
                       child: Text("Add a Quest",

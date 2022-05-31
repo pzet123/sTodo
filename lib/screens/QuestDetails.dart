@@ -4,6 +4,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/main.dart';
 import 'package:stodo/models/QuestTask.dart';
+import 'package:stodo/screens/AddQuest.dart';
 
 import '../components/Notifications.dart';
 import '../models/Quest.dart';
@@ -61,11 +62,32 @@ class _QuestDetailsState extends State<QuestDetails> {
   }
 
   void deleteQuest() async {
-    questList.remove(quest);
-    saveQuestList();
-    playQuestDeletedSound();
-    removeActiveQuest();
-    Navigator.pop(context);
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Are you sure you want to delete this quest?", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black)),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    questList.remove(quest);
+                    saveQuestList();
+                    playQuestDeletedSound();
+                    removeActiveQuest();
+                    int count = 0;
+                    Navigator.popUntil(context, (route) {
+                      return count++ == 2;
+                    });
+                  },
+                  child: Text("Yes", style: Theme.of(context).textTheme.subtitle1)),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("No", style: Theme.of(context).textTheme.subtitle1)),
+            ],
+          );
+        });
   }
 
   void finishQuest() {
@@ -173,6 +195,11 @@ class _QuestDetailsState extends State<QuestDetails> {
     ]);
   }
 
+  void editQuest() {
+    Navigator.push(context, MaterialPageRoute(
+        builder: (BuildContext context) => AddQuestScreen(questList, quest))).then((_) => setState(() {}));
+  }
+
   void makeActiveQuest() {
     setState(() {
       activeQuest = quest;
@@ -211,21 +238,44 @@ class _QuestDetailsState extends State<QuestDetails> {
           child: Stack(children: [
             Column(
               children: [
-                quest.isActive() || quest.isComplete()
-                    ? Text("")
-                    : ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondary),
-                        ),
-                        onPressed: makeActiveQuest,
-                        child: Text(
-                          "Set Active Quest",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(color: Colors.black),
-                        )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.secondary),
+                          ),
+                          onPressed: editQuest,
+                          child: Text(
+                            "Edit Quest",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5!
+                                .copyWith(color: Colors.black, fontSize: 16),
+                          )
+                      ),
+                    ),
+                    (!quest.isActive() && !quest.isComplete()) ? SizedBox(width: 10,) : Text(""),
+                    (!quest.isActive() && !quest.isComplete()) ?
+                    Expanded(
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.secondary),
+                          ),
+                          onPressed: makeActiveQuest,
+                          child: Text(
+                            "Set Active Quest",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5!
+                                .copyWith(color: Colors.black, fontSize: 16),
+                          )),
+                    ) : Text(""),
+                  ],
+                ),
                 Expanded(
                   flex: quest.getDescription().isEmpty
                       ? 0
