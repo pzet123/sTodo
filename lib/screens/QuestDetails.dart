@@ -112,6 +112,9 @@ class _QuestDetailsState extends State<QuestDetails> {
       finishQuest();
     } else if (task.isCompleted()) {
       playQuestUpdatedSound();
+      if(quest.isActive()){
+        createQuestTrackingNotification(questName: quest.getName(), nextTask: quest.getActiveTask());
+      }
       setState(() {
         questUpdatedOpacity = 1.0;
         hideWidget = false;
@@ -121,6 +124,11 @@ class _QuestDetailsState extends State<QuestDetails> {
           questUpdatedOpacity = 0.0;
         });
       });
+    } else {
+      if(quest.isActive()){
+        createQuestTrackingNotification(questName: quest.getName(), nextTask: quest.getActiveTask());
+      }
+
     }
   }
 
@@ -197,7 +205,11 @@ class _QuestDetailsState extends State<QuestDetails> {
 
   void editQuest() {
     Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) => AddQuestScreen(questList, quest))).then((_) => setState(() {}));
+        builder: (BuildContext context) => AddQuestScreen(questList, quest))).then((_) => setState(() {
+          if(quest.isActive()){
+            createQuestTrackingNotification(questName: quest.getName(), nextTask: quest.getActiveTask());
+          }
+    }));
   }
 
   void makeActiveQuest() {
