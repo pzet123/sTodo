@@ -6,6 +6,7 @@ import 'package:stodo/models/QuestTask.dart';
 
 import '../main.dart';
 import '../models/Quest.dart';
+import '../models/Frequency.dart';
 
 class AddQuestScreen extends StatefulWidget {
   List<Quest> questList;
@@ -20,11 +21,13 @@ class AddQuestScreen extends StatefulWidget {
 class _AddQuestScreenState extends State<AddQuestScreen> {
   TextEditingController questTitleController = TextEditingController();
   TextEditingController questDescriptionController = TextEditingController();
+  TextEditingController questFrequencyController = TextEditingController();
   TextEditingController newTaskController = TextEditingController();
   double questAddedTextOpacity = 0.0;
   bool _hideWidget = true;
   bool _questTitleValid = true;
   bool _editingQuest = false;
+  Frequency? _questFrequency = Frequency.completeOnce;
 
   late Quest questToEdit;
   late Timer questAddedTimer = Timer(Duration(seconds: 0), () {});
@@ -131,6 +134,67 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     }
   }
 
+  void chooseQuestFrequency() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Choose Quest Frequency", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: Text("Complete Once", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                    leading: Radio<Frequency>(
+                      value: Frequency.completeOnce,
+                      groupValue: _questFrequency,
+                      onChanged: (Frequency? newFreq){
+                        setState((){
+                          _questFrequency = newFreq;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: Text("Everyday", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                    leading: Radio<Frequency>(
+                      value: Frequency.everyday,
+                      groupValue: _questFrequency,
+                      onChanged: (Frequency? newFreq){
+                        setState((){
+                          _questFrequency = newFreq;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: Text("Every n days", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),),
+                    leading: Radio<Frequency>(
+                      value: Frequency.everyNDays,
+                      groupValue: _questFrequency,
+                      onChanged: (Frequency? newFreq){
+                        setState((){
+                          _questFrequency = newFreq;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+              actions: [
+                ElevatedButton(onPressed: () => print("Confirm Selection"),
+                    child: Text("Confirm", style: Theme.of(context).textTheme.subtitle1,))
+              ],
+            );
+          }
+          );
+      }
+    );
+  }
+
   void addTask() {
     FocusManager.instance.primaryFocus?.unfocus();
     showDialog(
@@ -220,6 +284,36 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                   labelStyle: Theme.of(context).textTheme.subtitle1),
               controller: questDescriptionController,
               style: Theme.of(context).textTheme.subtitle1),
+        ),
+        // Container(
+        //   margin: EdgeInsets.all(10),
+        //   child: TextField(
+        //       enabled: true,
+        //       textAlign: TextAlign.center,
+        //       decoration: InputDecoration(
+        //           hintText: "Enter Quest Description",
+        //           hintStyle: Theme.of(context).textTheme.subtitle1,
+        //           enabledBorder: OutlineInputBorder(
+        //               borderSide: BorderSide(
+        //                   color: Theme.of(context).colorScheme.tertiary)),
+        //           focusedBorder: OutlineInputBorder(
+        //               borderSide: BorderSide(
+        //                   color: Theme.of(context).colorScheme.secondary)),
+        //           labelText: "Quest Frequency",
+        //           labelStyle: Theme.of(context).textTheme.subtitle1),
+        //       controller: questDescriptionController,
+        //       style: Theme.of(context).textTheme.subtitle1),
+        // ),
+        Container(
+          margin: EdgeInsets.all(10),
+          child: ElevatedButton(
+            onPressed: chooseQuestFrequency,
+            child: ListTile(
+              tileColor: Theme.of(context).colorScheme.secondary,
+              title: Text("Complete once"),
+              subtitle: Text("Quest Frequency"),
+            ),
+          ),
         ),
         Text("Tasks", style: Theme.of(context).textTheme.headline1),
         ElevatedButton(
