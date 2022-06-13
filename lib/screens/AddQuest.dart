@@ -23,11 +23,13 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   TextEditingController questDescriptionController = TextEditingController();
   TextEditingController questFrequencyController = TextEditingController();
   TextEditingController newTaskController = TextEditingController();
+  TextEditingController repeatDaysController = TextEditingController();
   double questAddedTextOpacity = 0.0;
   bool _hideWidget = true;
   bool _questTitleValid = true;
   bool _editingQuest = false;
   Frequency? _questFrequency = Frequency.completeOnce;
+  String _questFrequencyString = "Complete Once";
 
   late Quest questToEdit;
   late Timer questAddedTimer = Timer(Duration(seconds: 0), () {});
@@ -101,7 +103,8 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     if (questValid()) {
       if(!_editingQuest){
         Quest newQuest = Quest(questTitleController.text,
-            questDescriptionController.text, newTasks, false, false);
+            questDescriptionController.text, newTasks, false,
+            false, _questFrequency!, int.parse(repeatDaysController.text));
         widget.questList.add(newQuest);
         playNewQuestSound();
         saveQuestList();
@@ -131,6 +134,16 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
       });
     } else {
       playInvalidInputSound();
+    }
+  }
+
+  void updateQuestFrequencyText(){
+    if(_questFrequency == Frequency.completeOnce){
+      _questFrequencyString = "Complete Once";
+    } else if(_questFrequency == Frequency.everyday){
+      _questFrequencyString = "Everyday";
+    } else {
+      _questFrequencyString = "Every ${repeatDaysController.text} days";
     }
   }
 
@@ -171,7 +184,23 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     ),
                   ),
                   ListTile(
-                    title: Text("Every n days", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),),
+                    title: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Every ", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                        Expanded(
+                            child: TextField(
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
+                              controller: repeatDaysController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              ],
+                            )
+                        ),
+                        Text(" days", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black))
+                      ],
+                    ),
                     leading: Radio<Frequency>(
                       value: Frequency.everyNDays,
                       groupValue: _questFrequency,
@@ -185,14 +214,20 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                 ],
               ),
               actions: [
-                ElevatedButton(onPressed: () => print("Confirm Selection"),
+                ElevatedButton(
+                    onPressed: () {
+                      updateQuestFrequencyText();
+                      Navigator.pop(context);
+                    },
                     child: Text("Confirm", style: Theme.of(context).textTheme.subtitle1,))
               ],
             );
           }
           );
       }
-    );
+    ).then((_) {
+      setState(() {});
+    });
   }
 
   void addTask() {
@@ -285,33 +320,14 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
               controller: questDescriptionController,
               style: Theme.of(context).textTheme.subtitle1),
         ),
-        // Container(
-        //   margin: EdgeInsets.all(10),
-        //   child: TextField(
-        //       enabled: true,
-        //       textAlign: TextAlign.center,
-        //       decoration: InputDecoration(
-        //           hintText: "Enter Quest Description",
-        //           hintStyle: Theme.of(context).textTheme.subtitle1,
-        //           enabledBorder: OutlineInputBorder(
-        //               borderSide: BorderSide(
-        //                   color: Theme.of(context).colorScheme.tertiary)),
-        //           focusedBorder: OutlineInputBorder(
-        //               borderSide: BorderSide(
-        //                   color: Theme.of(context).colorScheme.secondary)),
-        //           labelText: "Quest Frequency",
-        //           labelStyle: Theme.of(context).textTheme.subtitle1),
-        //       controller: questDescriptionController,
-        //       style: Theme.of(context).textTheme.subtitle1),
-        // ),
         Container(
           margin: EdgeInsets.all(10),
           child: ElevatedButton(
             onPressed: chooseQuestFrequency,
             child: ListTile(
               tileColor: Theme.of(context).colorScheme.secondary,
-              title: Text("Complete once"),
-              subtitle: Text("Quest Frequency"),
+              title: Text(_questFrequencyString, style: Theme.of(context).textTheme.headline1!.copyWith(color: Colors.black),),
+              subtitle: Text("Quest Frequency", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),),
             ),
           ),
         ),

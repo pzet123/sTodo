@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:stodo/models/QuestTask.dart';
 
+import 'Frequency.dart';
+
 class Quest{
   List<QuestTask> _tasks;
   bool _isComplete;
@@ -10,9 +12,12 @@ class Quest{
   String _name;
   String _description;
   String _key;
+  Frequency _questFrequency;
+  int _repeatDays;
+  DateTime _lastRecurrenceDate;
 
 
-  Quest(this._name, this._description, this._tasks, this._isComplete, this._isActive) : _key = UniqueKey().toString();
+  Quest(this._name, this._description, this._tasks, this._isComplete, this._isActive, this._questFrequency, this._repeatDays) : _key = UniqueKey().toString(), _lastRecurrenceDate = DateTime.now();
 
   Quest.fromJson(Map<String, dynamic> jsonMap) :
       _name = jsonMap["name"],
@@ -20,7 +25,10 @@ class Quest{
       _isActive = jsonMap["isActive"] == "true",
       _tasks = (json.decode(jsonMap["tasks"]) as List<dynamic>).map((e) => QuestTask.fromJson(e)).toList(),
       _description = jsonMap["description"],
-      _key = jsonMap["key"];
+      _key = jsonMap["key"],
+      _questFrequency = jsonMap.containsKey("questFrequency") ? json.decode(jsonMap["questFrequency"]) : Frequency.completeOnce,
+      _repeatDays = jsonMap.containsKey("repeatDays") ? jsonMap["repeatDays"] : 0,
+      _lastRecurrenceDate = jsonMap.containsKey("lastRecurrenceDate") ? json.decode(jsonMap["lastRecurrenceDate"]) : DateTime.now();
 
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +38,9 @@ class Quest{
     "tasks" : json.encode(_tasks),
     "description" : _description,
     "key" : _key,
+    "questFrequency" : json.encode(_questFrequency),
+    "repeatDays" : _repeatDays,
+    "lastRecurrenceDate" : _lastRecurrenceDate
   };
 
   bool isComplete(){
