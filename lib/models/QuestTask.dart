@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 class QuestTask{
   String _description;
   bool _isCompleted;
@@ -24,6 +26,10 @@ class QuestTask{
 
   void toggleCompleted(){
     _isCompleted = !_isCompleted;
+  }
+
+  void setCompleted(bool isCompleted){
+    _isCompleted = isCompleted;
   }
 
 }

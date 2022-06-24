@@ -33,20 +33,10 @@
             ]
         },
         {
-            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-it_values-it.arsc.flat",
+            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-ky_values-ky.arsc.flat",
             "map": [
                 {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-it/values-it.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,167,264,359,489",
-                        "endColumns": "111,96,94,129,135",
-                        "endOffsets": "162,259,354,484,620"
-                    }
-                },
-                {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-it/values-it.xml",
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-ky/values-ky.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -57,9 +47,19 @@
                     "to": {
                         "startLines": "7",
                         "startColumns": "4",
-                        "startOffsets": "625",
+                        "startOffsets": "612",
                         "endColumns": "100",
-                        "endOffsets": "721"
+                        "endOffsets": "708"
+                    }
+                },
+                {
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-ky/values-ky.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,164,264,362,484",
+                        "endColumns": "108,99,97,121,127",
+                        "endOffsets": "159,259,357,479,607"
                     }
                 }
             ]
@@ -97,10 +97,20 @@
             ]
         },
         {
-            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-ky_values-ky.arsc.flat",
+            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-it_values-it.arsc.flat",
             "map": [
                 {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-ky/values-ky.xml",
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-it/values-it.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,167,264,359,489",
+                        "endColumns": "111,96,94,129,135",
+                        "endOffsets": "162,259,354,484,620"
+                    }
+                },
+                {
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-it/values-it.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -111,28 +121,28 @@
                     "to": {
                         "startLines": "7",
                         "startColumns": "4",
-                        "startOffsets": "612",
+                        "startOffsets": "625",
                         "endColumns": "100",
-                        "endOffsets": "708"
-                    }
-                },
-                {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-ky/values-ky.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,164,264,362,484",
-                        "endColumns": "108,99,97,121,127",
-                        "endOffsets": "159,259,357,479,607"
+                        "endOffsets": "721"
                     }
                 }
             ]
         },
         {
-            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-be_values-be.arsc.flat",
+            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-da_values-da.arsc.flat",
             "map": [
                 {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-be/values-be.xml",
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-da/values-da.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,160,264,361,483",
+                        "endColumns": "104,103,96,121,129",
+                        "endOffsets": "155,259,356,478,608"
+                    }
+                },
+                {
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-da/values-da.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -143,19 +153,9 @@
                     "to": {
                         "startLines": "7",
                         "startColumns": "4",
-                        "startOffsets": "633",
+                        "startOffsets": "613",
                         "endColumns": "100",
-                        "endOffsets": "729"
-                    }
-                },
-                {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-be/values-be.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,159,260,360,493",
-                        "endColumns": "103,100,99,132,139",
-                        "endOffsets": "154,255,355,488,628"
+                        "endOffsets": "709"
                     }
                 }
             ]
@@ -193,20 +193,10 @@
             ]
         },
         {
-            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-da_values-da.arsc.flat",
+            "outputFile": "/Users/piotrzychlinski/Desktop/Development/androidStudioProjects/sTodo/build/app/intermediates/res/merged/debug/values-be_values-be.arsc.flat",
             "map": [
                 {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-da/values-da.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,160,264,361,483",
-                        "endColumns": "104,103,96,121,129",
-                        "endOffsets": "155,259,356,478,608"
-                    }
-                },
-                {
-                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-da/values-da.xml",
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-be/values-be.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -217,9 +207,19 @@
                     "to": {
                         "startLines": "7",
                         "startColumns": "4",
-                        "startOffsets": "613",
+                        "startOffsets": "633",
                         "endColumns": "100",
-                        "endOffsets": "709"
+                        "endOffsets": "729"
+                    }
+                },
+                {
+                    "source": "/Users/piotrzychlinski/.gradle/caches/transforms-2/files-2.1/de16f4b64dab27be6e205eda03cecad0/jetified-media2-session-1.1.3/res/values-be/values-be.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,159,260,360,493",
+                        "endColumns": "103,100,99,132,139",
+                        "endOffsets": "154,255,355,488,628"
                     }
                 }
             ]

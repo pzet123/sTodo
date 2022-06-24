@@ -43,7 +43,10 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
       this.questToEdit = questToEdit!;
       questTitleController.text = questToEdit.getName();
       questDescriptionController.text = questToEdit.getDescription();
+      repeatDaysController.text = questToEdit.getRepeatDays().toString();
+      _questFrequency = questToEdit.getFrequency();
       newTasks = questToEdit.getTasks();
+      updateQuestFrequencyText();
     }
   }
 
@@ -99,20 +102,36 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     }
   }
 
+  bool questFrequencyValid(Frequency frequency) {
+    if(frequency == Frequency.everyNDays){
+      if(repeatDaysController.text.length != 0 && int.parse(repeatDaysController.text) > 1){
+        return true;
+      } else {
+        SnackBar snackBar = SnackBar(content: Text("Invalid quest frequency input"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
   void addQuest() async {
     if (questValid()) {
       if(!_editingQuest){
         Quest newQuest = Quest(questTitleController.text,
             questDescriptionController.text, newTasks, false,
-            false, _questFrequency!, int.parse(repeatDaysController.text));
+            false, _questFrequency!, (repeatDaysController.text.length > 0) ? int.parse(repeatDaysController.text) : 1);
         widget.questList.add(newQuest);
         playNewQuestSound();
         saveQuestList();
       }
-      if(_editingQuest){
+      else {
         questToEdit.setName(questTitleController.text);
         questToEdit.setDescription(questDescriptionController.text);
         questToEdit.setTasks(newTasks);
+        questToEdit.setFrequency(_questFrequency!);
+        questToEdit.setRepeatDays(int.parse(repeatDaysController.text));
         playMenuSound();
         saveQuestList();
         Navigator.pop(context);
@@ -141,9 +160,9 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     if(_questFrequency == Frequency.completeOnce){
       _questFrequencyString = "Complete Once";
     } else if(_questFrequency == Frequency.everyday){
-      _questFrequencyString = "Everyday";
+      _questFrequencyString = "Repeat everyday";
     } else {
-      _questFrequencyString = "Every ${repeatDaysController.text} days";
+      _questFrequencyString = "Repeat every ${repeatDaysController.text} days";
     }
   }
 
@@ -152,6 +171,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
+          Frequency tempFrequency = _questFrequency!;
           return StatefulBuilder(
               builder: (context, setState) {
             return AlertDialog(
@@ -163,10 +183,10 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     title: Text("Complete Once", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
                     leading: Radio<Frequency>(
                       value: Frequency.completeOnce,
-                      groupValue: _questFrequency,
+                      groupValue: tempFrequency,
                       onChanged: (Frequency? newFreq){
                         setState((){
-                          _questFrequency = newFreq;
+                          tempFrequency = newFreq!;
                         });
                       },
                     ),
@@ -175,10 +195,10 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     title: Text("Everyday", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
                     leading: Radio<Frequency>(
                       value: Frequency.everyday,
-                      groupValue: _questFrequency,
+                      groupValue: tempFrequency,
                       onChanged: (Frequency? newFreq){
                         setState((){
-                          _questFrequency = newFreq;
+                          tempFrequency = newFreq!;
                         });
                       },
                     ),
@@ -190,6 +210,10 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                         Text("Every ", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
                         Expanded(
                             child: TextField(
+                              maxLength: 2,
+                              decoration: InputDecoration(
+                                  counterText: ''
+                              ),
                               style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
                               controller: repeatDaysController,
                               keyboardType: TextInputType.number,
@@ -203,10 +227,10 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     ),
                     leading: Radio<Frequency>(
                       value: Frequency.everyNDays,
-                      groupValue: _questFrequency,
+                      groupValue: tempFrequency,
                       onChanged: (Frequency? newFreq){
                         setState((){
-                          _questFrequency = newFreq;
+                          tempFrequency = newFreq!;
                         });
                       },
                     ),
@@ -216,8 +240,13 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
               actions: [
                 ElevatedButton(
                     onPressed: () {
-                      updateQuestFrequencyText();
-                      Navigator.pop(context);
+                      if(questFrequencyValid(tempFrequency)){
+                        _questFrequency = tempFrequency;
+                        updateQuestFrequencyText();
+                        Navigator.pop(context);
+                      } else {
+                        playInvalidInputSound();
+                      }
                     },
                     child: Text("Confirm", style: Theme.of(context).textTheme.subtitle1,))
               ],
@@ -321,7 +350,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
               style: Theme.of(context).textTheme.subtitle1),
         ),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.symmetric(vertical: 10),
           child: ElevatedButton(
             onPressed: chooseQuestFrequency,
             child: ListTile(
@@ -442,6 +471,18 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                         controller: questDescriptionController,
                         style: Theme.of(context).textTheme.subtitle1),
                   ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    width: MediaQuery.of(context).size.width / 2 - 20,
+                    child: ElevatedButton(
+                      onPressed: chooseQuestFrequency,
+                      child: ListTile(
+                        tileColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(_questFrequencyString, style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.black),),
+                        subtitle: Text("Quest Frequency", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Column(
@@ -472,22 +513,19 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                       ),
                     ),
                   ),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                              horizontal: MediaQuery.of(context).size.width / 4 - 60,
+                              vertical: 10)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondary)),
+                      onPressed: addQuest,
+                      child: Text(_editingQuest ? "Edit Quest" : "Add Quest", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black),)
+                  ),
                 ],
               )
             ],
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: ElevatedButton(
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width / 2 - 60,
-                      vertical: 10)),
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.secondary)),
-              onPressed: addQuest,
-              child: Text(_editingQuest ? "Edit Quest" : "Add Quest", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black),)
           ),
         ),
         SizedBox(height: 10)

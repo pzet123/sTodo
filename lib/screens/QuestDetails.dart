@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/main.dart';
+import 'package:stodo/models/Frequency.dart';
 import 'package:stodo/models/QuestTask.dart';
 import 'package:stodo/screens/AddQuest.dart';
 
@@ -226,8 +227,18 @@ class _QuestDetailsState extends State<QuestDetails> {
         questName: quest.getName(), nextTask: quest.getActiveTask());
   }
 
+  String formatDate(DateTime date){
+    String hours = (date.hour < 10) ? "0" + date.hour.toString() : date.hour.toString();
+    String minutes = (date.minute < 10) ? "0" + date.minute.toString() : date.minute.toString();
+    String days = (date.day < 10) ? "0" + date.day.toString() : date.day.toString();
+    String months = (date.month < 10) ? "0" + date.month.toString() : date.month.toString();
+    return "$hours:$minutes $days-$months-${date.year}";
+  }
+
   @override
   Widget build(BuildContext context) {
+    DateTime nextRecurrenceDate = quest.getLastRecurrenceDate().add(Duration(days: (quest.getFrequency() == Frequency.everyday) ? 1 : quest.getRepeatDays()));
+    String nextRecurrenceString = formatDate(nextRecurrenceDate);
     Orientation orientation = MediaQuery.of(context).orientation;
     return Stack(children: [
       Scaffold(
@@ -288,6 +299,8 @@ class _QuestDetailsState extends State<QuestDetails> {
                     ) : Text(""),
                   ],
                 ),
+                (quest.getFrequency() != Frequency.completeOnce) ?
+                    Text("Next Recurrence: $nextRecurrenceString", style: Theme.of(context).textTheme.headline3,) : Text(""),
                 Expanded(
                   flex: quest.getDescription().isEmpty
                       ? 0

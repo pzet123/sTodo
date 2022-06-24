@@ -10,11 +10,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:stodo/components/Notifications.dart';
+import 'package:stodo/models/Frequency.dart';
 import 'package:stodo/screens/AddQuest.dart';
 import 'package:stodo/screens/Quests.dart';
 import 'package:stodo/screens/System.dart';
 
 import 'models/Quest.dart';
+import 'models/QuestTask.dart';
 
 const int NUM_OF_SCREENS = 2;
 
@@ -51,15 +53,40 @@ getQuestList() async {
   }
 }
 
-saveQuestList() async {
+void resetQuest(Quest quest){
+  for(QuestTask task in quest.getTasks()){
+    task.setCompleted(false);
+  }
+  quest.setComplete(false);
+  quest.setLastRecurrenceDate(DateTime.now());
+}
+
+updateQuests() async {
+  for(Quest quest in questList){
+    if(quest.isComplete()){
+      if(quest.getFrequency() == Frequency.everyday){
+        if(quest.getLastRecurrenceDate().isBefore(DateTime.now().subtract(Duration(days: 1)))){
+          resetQuest(quest);
+        }
+      }
+      else if(quest.getFrequency() == Frequency.everyNDays){
+        if(quest.getLastRecurrenceDate().isBefore(DateTime.now().subtract(Duration(days: quest.getRepeatDays())))){
+          resetQuest(quest);
+        }
+      }
+    }
+  }
+}
+
+void  saveQuestList() async {
   sharedPreferences.setString("quests", json.encode(questList));
 }
 
-saveActiveQuest() async {
+void saveActiveQuest() async {
   sharedPreferences.setString("activeQuest", json.encode(activeQuest));
 }
 
-removeActiveQuest() async {
+void removeActiveQuest() async {
   sharedPreferences.remove("activeQuest");
 }
 
@@ -67,6 +94,8 @@ initialiseApp() async {
   sharedPreferences = await SharedPreferences.getInstance();
   await initialiseNotifications();
   await getQuestList();
+  await updateQuests();
+  saveQuestList();
   // rateMyApp.init();
   FlutterNativeSplash.remove();
   SystemChrome.setPreferredOrientations([

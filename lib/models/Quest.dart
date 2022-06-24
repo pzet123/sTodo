@@ -26,9 +26,9 @@ class Quest{
       _tasks = (json.decode(jsonMap["tasks"]) as List<dynamic>).map((e) => QuestTask.fromJson(e)).toList(),
       _description = jsonMap["description"],
       _key = jsonMap["key"],
-      _questFrequency = jsonMap.containsKey("questFrequency") ? json.decode(jsonMap["questFrequency"]) : Frequency.completeOnce,
+      _questFrequency = jsonMap.containsKey("questFrequency") ? getFrequencyFromString(jsonMap["questFrequency"]) : Frequency.completeOnce,
       _repeatDays = jsonMap.containsKey("repeatDays") ? jsonMap["repeatDays"] : 0,
-      _lastRecurrenceDate = jsonMap.containsKey("lastRecurrenceDate") ? json.decode(jsonMap["lastRecurrenceDate"]) : DateTime.now();
+      _lastRecurrenceDate = jsonMap.containsKey("lastRecurrenceDate") ? DateTime.parse(jsonMap["lastRecurrenceDate"]) : DateTime.now();
 
 
   Map<String, dynamic> toJson() => {
@@ -38,9 +38,9 @@ class Quest{
     "tasks" : json.encode(_tasks),
     "description" : _description,
     "key" : _key,
-    "questFrequency" : json.encode(_questFrequency),
+    "questFrequency" : _questFrequency.toString(),
     "repeatDays" : _repeatDays,
-    "lastRecurrenceDate" : _lastRecurrenceDate
+    "lastRecurrenceDate" : _lastRecurrenceDate.toIso8601String()
   };
 
   bool isComplete(){
@@ -73,6 +73,18 @@ class Quest{
 
   void setActive(bool active){
     _isActive = active;
+  }
+
+  void setFrequency(Frequency frequency){
+    _questFrequency = frequency;
+  }
+
+  void setRepeatDays(int repeatDays){
+    _repeatDays = repeatDays;
+  }
+
+  void setLastRecurrenceDate(DateTime lastRecurrenceDate){
+    _lastRecurrenceDate = lastRecurrenceDate;
   }
 
   void update(){
@@ -110,6 +122,30 @@ class Quest{
     }
     return null;
   }
+
+  int getRepeatDays(){
+    return _repeatDays;
+  }
+
+  Frequency getFrequency(){
+    return _questFrequency;
+  }
+
+  DateTime getLastRecurrenceDate(){
+    return _lastRecurrenceDate;
+  }
+
+  String toString(){
+    return "Quest Name $_name \n" +
+            "Quest Description $_description \n" +
+            "Quest is active? $_isActive \n" +
+            "Quest is completed? $_isComplete \n" +
+            "Quest tasks $_tasks \n" +
+            "Quest frequency $_questFrequency \n" +
+            "Quest last recurrence date $_lastRecurrenceDate \n" +
+            "Quest repeat days $_repeatDays \n\n";
+  }
+
 
   bool operator ==(dynamic quest) {
     return (quest is Quest) && (quest.getKey() == _key) && (quest.getName() == _name);
