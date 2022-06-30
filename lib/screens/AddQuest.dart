@@ -305,7 +305,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.fromLTRB(10, 10, 10, 2),
           child: TextField(
               textCapitalization: TextCapitalization.words,
               keyboardAppearance: Brightness.dark,
@@ -329,7 +329,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
               style: Theme.of(context).textTheme.subtitle1),
         ),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
           child: TextField(
               textCapitalization: TextCapitalization.sentences,
               keyboardAppearance: Brightness.dark,
@@ -352,12 +352,11 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
         Container(
           margin: EdgeInsets.symmetric(vertical: 10),
           child: ElevatedButton(
-            onPressed: chooseQuestFrequency,
-            child: ListTile(
-              tileColor: Theme.of(context).colorScheme.secondary,
-              title: Text(_questFrequencyString, style: Theme.of(context).textTheme.headline1!.copyWith(color: Colors.black),),
-              subtitle: Text("Quest Frequency", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white)
             ),
+            onPressed: chooseQuestFrequency,
+            child: Text(_questFrequencyString, style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.black),),
           ),
         ),
         Text("Tasks", style: Theme.of(context).textTheme.headline1),
@@ -373,6 +372,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                   .headline5
                   ?.copyWith(color: Colors.black),
             )),
+
         Expanded(
           child: Container(
             margin: EdgeInsets.all(10),
@@ -473,14 +473,12 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
-                    width: MediaQuery.of(context).size.width / 2 - 20,
                     child: ElevatedButton(
-                      onPressed: chooseQuestFrequency,
-                      child: ListTile(
-                        tileColor: Theme.of(context).colorScheme.secondary,
-                        title: Text(_questFrequencyString, style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.black),),
-                        subtitle: Text("Quest Frequency", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),),
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white)
                       ),
+                      onPressed: chooseQuestFrequency,
+                      child: Text(_questFrequencyString, style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.black),),
                     ),
                   ),
                 ],
@@ -497,7 +495,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                         "Add a new task",
                         style: Theme.of(context)
                             .textTheme
-                            .headline3
+                            .headline5
                             ?.copyWith(color: Colors.black),
                       )),
                   Expanded(
