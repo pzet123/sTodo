@@ -23,6 +23,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
   TextEditingController questDescriptionController = TextEditingController();
   TextEditingController questFrequencyController = TextEditingController();
   TextEditingController newTaskController = TextEditingController();
+  TextEditingController editTaskController = TextEditingController();
   TextEditingController repeatDaysController = TextEditingController();
   double questAddedTextOpacity = 0.0;
   bool _hideWidget = true;
@@ -57,9 +58,15 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     super.dispose();
   }
 
+  void editTask(int index){
+    addTask(true, index: index);
+  }
+
   List<Widget> getNewTasks() {
     List<Widget> newTaskWidgets = [];
+    int count = 0;
     newTasks.forEach((task) {
+      var newCount = count;
       newTaskWidgets.add(Dismissible(
         direction: DismissDirection.startToEnd,
         key: UniqueKey(),
@@ -68,14 +75,26 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
             newTasks.remove(task);
           });
         },
-        child: ListTile(
-          title: Text(
-            task.getTaskDescription(),
-            style: Theme.of(context).textTheme.headline3,
-            textAlign: TextAlign.center,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            color: Theme.of(context).colorScheme.secondary
+          ),
+          child: GestureDetector(
+            onTap: () {
+              editTask(newCount);
+            },
+            child: Text(
+              task.getTaskDescription(),
+              style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ));
+      count++;
     });
     return newTaskWidgets;
   }
@@ -175,13 +194,18 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
           return StatefulBuilder(
               builder: (context, setState) {
             return AlertDialog(
-              title: Text("Choose Quest Frequency", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black)),
+              shape: BeveledRectangleBorder(
+                side: BorderSide(color: Colors.white, width: 1)
+              ),
+              backgroundColor: Colors.black87,
+              title: Text("Choose Quest Frequency", style: Theme.of(context).textTheme.headline3),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
-                    title: Text("Complete Once", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                    title: Text("Complete Once", style: Theme.of(context).textTheme.subtitle1),
                     leading: Radio<Frequency>(
+                      activeColor: Colors.white,
                       value: Frequency.completeOnce,
                       groupValue: tempFrequency,
                       onChanged: (Frequency? newFreq){
@@ -192,8 +216,9 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     ),
                   ),
                   ListTile(
-                    title: Text("Everyday", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                    title: Text("Everyday", style: Theme.of(context).textTheme.subtitle1),
                     leading: Radio<Frequency>(
+                      activeColor: Colors.white,
                       value: Frequency.everyday,
                       groupValue: tempFrequency,
                       onChanged: (Frequency? newFreq){
@@ -207,14 +232,22 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                     title: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Every ", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                        Text("Every ", style: Theme.of(context).textTheme.subtitle1),
                         Expanded(
                             child: TextField(
+                              cursorColor: Colors.white,
                               maxLength: 2,
                               decoration: InputDecoration(
-                                  counterText: ''
+                                  counterText: '',
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.tertiary)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.secondary)),
                               ),
-                              style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subtitle1,
                               controller: repeatDaysController,
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
@@ -222,10 +255,11 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                               ],
                             )
                         ),
-                        Text(" days", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black))
+                        Text(" days", style: Theme.of(context).textTheme.subtitle1)
                       ],
                     ),
                     leading: Radio<Frequency>(
+                      activeColor: Colors.white,
                       value: Frequency.everyNDays,
                       groupValue: tempFrequency,
                       onChanged: (Frequency? newFreq){
@@ -239,6 +273,9 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
               ),
               actions: [
                 ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                    ),
                     onPressed: () {
                       if(questFrequencyValid(tempFrequency)){
                         _questFrequency = tempFrequency;
@@ -248,7 +285,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                         playInvalidInputSound();
                       }
                     },
-                    child: Text("Confirm", style: Theme.of(context).textTheme.subtitle1,))
+                    child: Text("Confirm", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),))
               ],
             );
           }
@@ -259,30 +296,56 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
     });
   }
 
-  void addTask() {
+  void addTask(bool editingTask, {int index = 0}) {
+    if(editingTask){
+      editTaskController.text = newTasks[index].getTaskDescription();
+    }
     FocusManager.instance.primaryFocus?.unfocus();
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Add a Task", style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black)),
+            shape: BeveledRectangleBorder(
+                side: BorderSide(color: Colors.white, width: 1)
+            ),
+            backgroundColor: Colors.black87,
+            title: Text(editingTask ? "Edit Task" : "Add a Task", style: Theme.of(context).textTheme.headline3),
             content: TextField(
               textCapitalization: TextCapitalization.sentences,
               keyboardAppearance: Brightness.dark,
-              controller: newTaskController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                  hintText: "Enter Task Description",
+                  hintStyle: Theme.of(context).textTheme.subtitle1,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.tertiary)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary)),
+                  labelText: "Task Description",
+                  labelStyle: Theme.of(context).textTheme.subtitle1),
+              controller: editingTask ? editTaskController : newTaskController,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1
-                  ?.copyWith(color: Colors.black),
+                  .subtitle1,
             ),
             actions: [
               ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                  ),
                   onPressed: () => setState(() {
-                        if (newTaskController.text.trim().isNotEmpty) {
+                        if ((editingTask ? editTaskController : newTaskController).text.trim().isNotEmpty) {
                           FocusManager.instance.primaryFocus?.unfocus();
-                          newTasks
-                              .add(QuestTask(newTaskController.text, false));
-                          newTaskController.clear();
+                          if(editingTask){
+                            newTasks[index].setTaskDescription(editTaskController.text);
+                            editTaskController.clear();
+                          } else {
+                            newTasks
+                                .add(QuestTask(newTaskController.text, false));
+                            newTaskController.clear();
+                          }
                         } else {
                           SnackBar emptyTaskSnackBar =
                               SnackBar(content: Text("Tasks cannot be empty"));
@@ -294,7 +357,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                       }),
                   child: Icon(
                     Icons.add,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.black
                   ))
             ],
           );
@@ -361,7 +424,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
         ),
         Text("Tasks", style: Theme.of(context).textTheme.headline1),
         ElevatedButton(
-            onPressed: addTask,
+            onPressed: () { addTask(false); },
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondary)),
@@ -487,7 +550,7 @@ class _AddQuestScreenState extends State<AddQuestScreen> {
                 children: [
                   Text("Tasks", style: Theme.of(context).textTheme.headline1),
                   ElevatedButton(
-                      onPressed: addTask,
+                      onPressed: () { addTask(false); },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               Theme.of(context).colorScheme.secondary)),

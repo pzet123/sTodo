@@ -32,4 +32,8 @@ class QuestTask{
     _isCompleted = isCompleted;
   }
 
+  void setTaskDescription(String taskDescription){
+    _description = taskDescription;
+  }
+
 }
